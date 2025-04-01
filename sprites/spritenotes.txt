@@ -1,0 +1,3 @@
+slash is 15x15px
+radiobig is 48x48px
+everything else is 32x32px im pretty sure
