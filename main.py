@@ -86,7 +86,7 @@ class Game():
                 bullet.draw(self)
                 bullet.update()
             enemy = Enemy(self)
-            if random.random() >.01:
+            if random.random() >.8:
                 self.enemies.add(enemy)
                 for enemy in self.enemies:
                     enemy.draw(self)
