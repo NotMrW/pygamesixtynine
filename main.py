@@ -6,7 +6,7 @@ from bullet import Bullet
 #import classes from other files
 from settings import Settings
 from player import Player
-from enemy import Basic_MF
+from enemy import Enemy
 
 
 
@@ -20,8 +20,30 @@ class Game():
         self.running = True #I guess we can have a loop for the gaem...
         
         self.player = Player(self) #initialize player
-        self.enemy = Basic_MF(self) #initialize enemy
+        self.settings =  Settings() #initialize player's settings
+        #We have to initialize the directions, I guess...
+        self.moving_up = False
+        self.moving_down = False
+        self.moving_right = False
+        self.moving_left = False
         self.bullets = pygame.sprite.Group()
+        self.enemies = pygame.sprite.Group()
+
+
+    def draw(self,game):
+        pygame.draw.rect(game.screen, self.color, self.rect)
+
+        #get all of dis movement down below
+        if self.moving_down == True:
+            self.rect.y += self.settings.player_SPEED
+        if self.moving_left == True:
+            self.rect.x -= self.settings.player_SPEED
+        if self.moving_up == True:
+            self.rect.y -= self.settings.player_SPEED
+        if self.moving_right == True:
+            self.rect.x += self.settings.player_SPEED #initialize enemy
+        self.bullets = pygame.sprite.Group()
+        self.enemies = pygame.sprite.Group()
         
         
         #img = pygame.image.load("your_image.png/jpg") #load the image for the icon onto variable
@@ -55,16 +77,22 @@ class Game():
 
 
 
-
+            collisions = pygame.sprite.spritecollide(self.player, self.enemies, True)
+            collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, True)
             game.screen.fill('black')
             bullet = Bullet(self)
             self.bullets.add(bullet)
             for bullet in self.bullets:
                 bullet.draw(self)
                 bullet.update()
+            enemy = Enemy(self)
+            if random.random() >.01:
+                self.enemies.add(enemy)
+                for enemy in self.enemies:
+                    enemy.draw(self)
+                    enemy.update(self.player)
             ##all_sprites.update()
             self.player.draw(self) #draw the player
-            self.enemy.draw(Basic_MF)
             pygame.display.flip()
             self.clock.tick(self.settings.FPS) #initalizes frame rate
 

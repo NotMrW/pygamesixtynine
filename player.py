@@ -1,5 +1,5 @@
 from settings import Settings
-from main import Game
+
 
 import pygame
 
@@ -36,6 +36,15 @@ class Player:
     
     def check_hidden(self, game, map): #add a hiding mechanic
         collisions = pygame.sprite.spritecollide
+
+
+    def pickUp(self, inv, newItem): #limited inventory mechanic
+        if len(inv) >= 5:
+            print("Your inventory is full.")
+        else:
+            inv.append(newItem)
+            print(f"{newItem} added ot inventory.")
+        return inv
 
     #how will we add a flashlight mechanic?
 

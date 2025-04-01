@@ -25,7 +25,6 @@ class Bullet(pygame.sprite.Sprite):
         ]
         normalize = math.sqrt(distance[0]**2 + distance[1]**2)
         self.direction = [distance[0]/normalize, distance[1]/normalize]
-        print(self.direction)
         return self.direction
  
     def draw(self, game):

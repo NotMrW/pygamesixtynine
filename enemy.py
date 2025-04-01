@@ -1,36 +1,44 @@
-#import the modules, do you think it was going to be different?
 import pygame
+import random
+import math
 
-#import them other files' classes
-from player import Player
-from settings import Settings
-
-class Basic_MF(Player):
+class Enemy(pygame.sprite.Sprite):
     def __init__(self, game):
-        self.settings =  game.settings #initialize player's settings
-        self.x = self.settings.screen_WIDTH / 2 #center horizontally
-        self.y = self.settings.screen_HEIGHT / 2 #center vertically
-        self.rect = pygame.Rect(0,0,15,15) #make da hitbox
-        self.color = (255, 235, 205) #placeholder
-        self.rect.center = game.rect.center
-        self.inventory = [] #mechanic: only FIVE items at a time
+        super().__init__()
+        self.settings = game.settings
+        spawn = random.choice(['top', 'bottom', 'left', 'right'])
+        if spawn == 'top':
+            self.x = random.randint(0, self.settings.screen_WIDTH)
+            self.y = 0
+        elif spawn == 'bottom':
+            self.x = random.randint(0, self.settings.screen_WIDTH)
+            self.y = self.settings.screen_HEIGHT
+        elif spawn == 'left':
+            self.x = 0
+            self.y = random.randint(0, self.settings.screen_HEIGHT)
+        elif spawn == 'right':
+            self.x = self.settings.screen_WIDTH
+            self.y = random.randint(0, self.settings.screen_HEIGHT)
 
-        #We have to initialize the directions, I guess...
-        self.moving_up = False
-        self.moving_down = False
-        self.moving_right = False
-        self.moving_left = False
+        self.color = (0, 255, 0)
+        self.rect = pygame.Rect(self.x, self.y, 20, 20)  # Corrected to pygame.Rect
 
+    def update(self, player):
+        if player:  # Ensure player is not None
+            self.target = player.rect.center
+            distance = [
+                self.target[0] - self.x,
+                self.target[1] - self.y
+            ]
+            normalize = math.sqrt(distance[0]**2 + distance[1]**2)
+            
+            if normalize > 0:  # Prevent division by zero
+                self.direction = [distance[0] / normalize, distance[1] / normalize]
+                speed = 2  # Set a speed for the enemy
+                self.x += self.direction[0] * speed
+                self.y += self.direction[1] * speed
+            
+            self.rect.topleft = (self.x, self.y)
 
-    def draw(self,game):
+    def draw(self, game):
         pygame.draw.rect(game.screen, self.color, self.rect)
-
-        #get all of dis movement down below
-        if self.moving_down == True:
-            self.rect.y += self.settings.player_SPEED
-        if self.moving_left == True:
-            self.rect.x -= self.settings.player_SPEED
-        if self.moving_up == True:
-            self.rect.y -= self.settings.player_SPEED
-        if self.moving_right == True:
-            self.rect.x += self.settings.player_SPEED
