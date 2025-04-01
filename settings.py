@@ -5,4 +5,4 @@ class Settings():
         self.FPS = 60
 
         self.player_SPEED = 5
-    
+        self.bullet_SPEED = 20

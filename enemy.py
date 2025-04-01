@@ -1,9 +1,11 @@
-from settings import Settings
-from main import Game
-
+#import the modules, do you think it was going to be different?
 import pygame
 
-class Player:
+#import them other files' classes
+from player import Player
+from settings import Settings
+
+class Basic_MF(Player):
     def __init__(self, game):
         self.settings =  game.settings #initialize player's settings
         self.x = self.settings.screen_WIDTH / 2 #center horizontally
@@ -32,13 +34,3 @@ class Player:
             self.rect.y -= self.settings.player_SPEED
         if self.moving_right == True:
             self.rect.x += self.settings.player_SPEED
-
-    
-    def check_hidden(self, game, map): #add a hiding mechanic
-        collisions = pygame.sprite.spritecollide
-
-    #how will we add a flashlight mechanic?
-
-#---------Special Traits---------#
-
-#These traits will be specific to other things that are not the player
