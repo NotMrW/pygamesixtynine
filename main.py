@@ -83,6 +83,10 @@ class Game():
             bullet = Bullet(self)
             self.bullets.add(bullet)
             for bullet in self.bullets:
+                if bullet.rect.left > self.settings.WIDTH or bullet.rect.right < 0:
+                    bullet.kill()
+                if bullet.rect.top > self.settings.HEIGHT or bullet.rect.bottom < 0:
+                    bullet.kill()
                 bullet.draw(self)
                 bullet.update()
             enemy = Enemy(self)
