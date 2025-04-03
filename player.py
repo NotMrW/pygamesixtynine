@@ -1,17 +1,24 @@
+#import dat other file bullshit
 from settings import Settings
+from enemy import Enemy
 
-
+#import dem modules
 import pygame
 
 class Player:
     def __init__(self, game):
+        """Initialize the Player"""
         self.settings =  game.settings #initialize player's settings
         self.x = self.settings.screen_WIDTH / 2 #center horizontally
         self.y = self.settings.screen_HEIGHT / 2 #center vertically
-        self.rect = pygame.Rect(0,0,15,15) #make da hitbox
-        self.color = (255, 235, 205) #placeholder
-        self.rect.center = game.rect.center
+        """self.rect = pygame.Rect(0,0,15,15) #make da hitbox
+        self.rect.center = game.rect.center"""
         self.inventory = [] #mechanic: only FIVE items at a time
+
+        self.IMAGE = pygame.image.load('sprites\manFace_More.png').convert()
+        self.rect = self.IMAGE.get_rect()
+        self.rect.center = (200, 300)
+
 
         #We have to initialize the directions, I guess...
         self.moving_up = False
@@ -21,7 +28,8 @@ class Player:
 
 
     def draw(self,game):
-        pygame.draw.rect(game.screen, self.color, self.rect)
+        """Draw da player"""
+        game.screen.blit(self.IMAGE, self.rect)
 
         #get all of dis movement down below
         if self.moving_down == True:
@@ -33,12 +41,19 @@ class Player:
         if self.moving_right == True:
             self.rect.x += self.settings.player_SPEED
 
+
+    def die(self, enemy):
+        """check if I should die yet"""
+        #how tf do we check collisions for Player/Little_Shit?
+
     
-    def check_hidden(self, game, map): #add a hiding mechanic
-        collisions = pygame.sprite.spritecollide
+    def check_hidden(self, game, map):
+        """Hidden? Hidden."""
+        #Need to check Player/Hiding_Place collisions
 
 
-    def pickUp(self, inv, newItem): #limited inventory mechanic
+    def pickUp(self, inv, newItem):
+        """Too many items, I am now overencumbered, damn"""
         if len(inv) >= 5:
             print("Your inventory is full.")
         else:

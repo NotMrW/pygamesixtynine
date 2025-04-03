@@ -1,9 +1,11 @@
+#import dem modules
 import pygame
 import random
 import math
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, game):
+        """Initialize da Enemies"""
         super().__init__()
         self.settings = game.settings
         spawn = random.choice(['top', 'bottom', 'left', 'right'])
@@ -24,6 +26,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = pygame.Rect(self.x, self.y, 20, 20)  # Corrected to pygame.Rect
 
     def update(self, player):
+        """Update the Enemies"""
         if player:  # Ensure player is not None
             self.target = player.rect.center
             distance = [
@@ -41,4 +44,5 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.topleft = (self.x, self.y)
 
     def draw(self, game):
+        """Draw them little shits"""
         pygame.draw.rect(game.screen, self.color, self.rect)

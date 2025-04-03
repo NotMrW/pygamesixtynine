@@ -1,24 +1,25 @@
 #import modules
 import random
 import pygame
-from bullet import Bullet
 
 #import classes from other files
 from settings import Settings
 from player import Player
 from enemy import Enemy
+from bullet import Bullet
 
 
 
 class Game():
-    def __init__(self): #initalize the gaem
+    def __init__(self):
+        """Initialize da Gaem"""
         self.settings = Settings() #initialize settings
         self.clock = pygame.time.Clock() #get a clock going
         self.screen = pygame.display.set_mode((self.settings.screen_WIDTH, self.settings.screen_HEIGHT)) #set the screen up
         self.rect = self.screen.get_rect() #get that rect
         pygame.display.set_caption("Try me") #name game window
         self.running = True #I guess we can have a loop for the gaem...
-        
+         
         self.player = Player(self) #initialize player
         self.settings =  Settings() #initialize player's settings
         #We have to initialize the directions, I guess...
@@ -26,16 +27,17 @@ class Game():
         self.moving_down = False
         self.moving_right = False
         self.moving_left = False
-        self.bullets = pygame.sprite.Group()
-        self.enemies = pygame.sprite.Group()
+        self.bullets = pygame.sprite.Group() #stuff the bulltes in one, plural group
+        self.enemies = pygame.sprite.Group() #Get the little shits into a plural group
 
 
     def draw(self,game):
+        """Draw da Gaem"""
         pygame.draw.rect(game.screen, self.color, self.rect)
 
-        #get all of dis movement down below
+        #get all of dis smexy movement down below
         if self.moving_down == True:
-            self.rect.y += self.settings.player_SPEED
+            self.rect.y += self.settings.player_SPEED 
         if self.moving_left == True:
             self.rect.x -= self.settings.player_SPEED
         if self.moving_up == True:
@@ -49,7 +51,8 @@ class Game():
         #img = pygame.image.load("your_image.png/jpg") #load the image for the icon onto variable
         #pygame.display.set_icon(img) #set the image variable for the window icon
 
-    def run(self): #make function to run da gaem
+    def run(self): 
+        """"Da function to run da gaem"""
         while self.running: #we use "running" value here for loop? Huh, neat
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -74,31 +77,33 @@ class Game():
                         self.player.moving_up = False
                     if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                         self.player.moving_down = False
+                        
 
 
+            collisions = pygame.sprite.spritecollide(self.player, self.enemies, True) #Player/Little_shit collisions
+            collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, True) #Bullet/Little_shit collisions
+            game.screen.fill('black') #fill the screen with racism
+            bullet = Bullet(self) #stuff the bullet into a variable
+            self.bullets.add(bullet) #stuff the bullet variable into a plural list
+            for bullet in self.bullets: #check dem bullets
+                if bullet.rect.left > self.settings.screen_WIDTH or bullet.rect.right < 0: #kill the bullets if they go off-screen
+                    bullet.kill() #KILL
+                if bullet.rect.top > self.settings.screen_HEIGHT or bullet.rect.bottom < 0: #kill the bullets if they go off-screen, twice
+                    bullet.kill() #KILL THEM ALL
+                bullet.draw(self) #Draw moar bullet
+                bullet.update() #Updates them there bullets
+            enemy = Enemy(self) #just stuff the enemies into a single variable, this is beyond explaination
 
-            collisions = pygame.sprite.spritecollide(self.player, self.enemies, True)
-            collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, True)
-            game.screen.fill('black')
-            bullet = Bullet(self)
-            self.bullets.add(bullet)
-            for bullet in self.bullets:
-                if bullet.rect.left > self.settings.WIDTH or bullet.rect.right < 0:
-                    bullet.kill()
-                if bullet.rect.top > self.settings.HEIGHT or bullet.rect.bottom < 0:
-                    bullet.kill()
-                bullet.draw(self)
-                bullet.update()
-            enemy = Enemy(self)
-            if random.random() >.8:
-                self.enemies.add(enemy)
-                for enemy in self.enemies:
-                    enemy.draw(self)
-                    enemy.update(self.player)
-            ##all_sprites.update()
+            if random.random() >.8: #Oh, we have GAMBLING?! RANDOMIZATION?!
+                self.enemies.add(enemy) #spawn the cannon fodder
+            for enemy in self.enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
+                #if random.random() < self.settings.ENEMY_FLASH_RATE: #Hmm...
+                enemy.draw(self) #OH, that makes more sense in terms of "flash_rate"
+                enemy.update(self.player) #draw those little shits
             self.player.draw(self) #draw the player
-            pygame.display.flip()
+            pygame.display.flip() #flippity flip; We actually don't know what this does
             self.clock.tick(self.settings.FPS) #initalizes frame rate
 
-game = Game()
-game.run()
+
+game = Game() #Define gaem as Gaem
+game.run() #Run dat shit
