@@ -3,6 +3,9 @@ import pygame
 import random
 import math
 
+#import dem other file
+from spritesheet import SpriteSheet
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, game):
         """Initialize da Enemies"""

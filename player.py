@@ -1,6 +1,7 @@
 #import dat other file bullshit
 from settings import Settings
 from enemy import Enemy
+from spritesheet import SpriteSheet
 
 #import dem modules
 import pygame
@@ -11,15 +12,13 @@ class Player:
         self.settings =  game.settings #initialize player's settings
         self.x = self.settings.screen_WIDTH / 2 #center horizontally
         self.y = self.settings.screen_HEIGHT / 2 #center vertically
-        """self.rect = pygame.Rect(0,0,15,15) #make da hitbox
-        self.rect.center = game.rect.center"""
+        self.spritesheet = SpriteSheet("sprites\manWalk.png")
+        self.sprites = self.spritesheet.get_images(0,0,128,64,8)
+        self.image = self.sprites[0]
         self.inventory = [] #mechanic: only FIVE items at a time
-        self.base_IMAGE = pygame.image.load('sprites\manWalk\manwalk-0.png').convert()
-        self.IMAGE = pygame.transform.scale(self.base_IMAGE, (64,64))
-        self.rect = self.IMAGE.get_rect()
-        self.rect.center = (200, 300)
+        self.rect = self.image.get_rect()
+        self.rect.center = game.rect.center
         
-
 
         #We have to initialize the directions, I guess...
         self.moving_up = False
@@ -27,13 +26,19 @@ class Player:
         self.moving_right = False
         self.moving_left = False
 
+        #frames
+        self.frame = 0
+
 
     def draw(self,game):
         """Draw da player"""
 
-        game.screen.blit(self.IMAGE, self.rect)
+        game.screen.blit(self.image, self.rect.topleft) #blit dat shit
 
+    def update(self):
         #get all of dis movement down below
+        self.frame = (self.frame+1)% len(self.sprites)
+        self.image = self.sprites[self.frame]
         if self.moving_down == True:
             self.rect.y += self.settings.player_SPEED
         if self.moving_left == True:
