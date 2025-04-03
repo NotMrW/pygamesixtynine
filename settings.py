@@ -17,4 +17,4 @@ class Settings():
         self.ENEMY_FLASH_RATE = .01 #flashy flashy
 
         #more sorting? Ugh
-        self.SCALE_FACTOR = 1 #Scale multiplier
+        self.SCALE_FACTOR = 4 #Scale multiplier

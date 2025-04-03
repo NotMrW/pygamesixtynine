@@ -41,5 +41,5 @@ class Bullet(pygame.sprite.Sprite):
         self.x += self.direction[0] * self.settings.bullet_SPEED #KEEP MOVING, horizontally
         self.y += self.direction[1] * self.settings.bullet_SPEED #KEEP MOVING, vertically
         self.rect.topleft = (self.x, self.y) #identify the topleft of dat rect
-        print(self.direction) #printy print
+       
  

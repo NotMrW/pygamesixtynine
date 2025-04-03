@@ -11,6 +11,7 @@ from bullet import Bullet
 
 
 class Game():
+    frame_count = 0
     def __init__(self):
         """Initialize da Gaem"""
         self.settings = Settings() #initialize settings
@@ -18,7 +19,7 @@ class Game():
         self.screen = pygame.display.set_mode((self.settings.screen_WIDTH, self.settings.screen_HEIGHT)) #set the screen up
         self.rect = self.screen.get_rect() #get that rect
         pygame.display.set_caption("Try me") #name game window
-        self.running = True #I guess we can have a loop for the gaem...
+        self.running = True #I guess we can have a loop for the gaem...dwa
          
         self.player = Player(self) #initialize player
         self.settings =  Settings() #initialize player's settings
@@ -31,21 +32,13 @@ class Game():
         self.enemies = pygame.sprite.Group() #Get the little shits into a plural group
 
 
+
     def draw(self,game):
         """Draw da Gaem"""
         pygame.draw.rect(game.screen, self.color, self.rect)
 
-        #get all of dis smexy movement down below
-        if self.moving_down == True:
-            self.rect.y += self.settings.player_SPEED 
-        if self.moving_left == True:
-            self.rect.x -= self.settings.player_SPEED
-        if self.moving_up == True:
-            self.rect.y -= self.settings.player_SPEED
-        if self.moving_right == True:
-            self.rect.x += self.settings.player_SPEED #initialize enemy
-        self.bullets = pygame.sprite.Group()
-        self.enemies = pygame.sprite.Group()
+
+
         
         
         #img = pygame.image.load("your_image.png/jpg") #load the image for the icon onto variable
@@ -100,9 +93,12 @@ class Game():
                 #if random.random() < self.settings.ENEMY_FLASH_RATE: #Hmm...
                 enemy.draw(self) #OH, that makes more sense in terms of "flash_rate"
                 enemy.update(self.player) #draw those little shits
+            self.player.update()
+            print(self.player)
             self.player.draw(self) #draw the player
-            pygame.display.flip() #flippity flip; We actually don't know what this does
+            pygame.display.flip() #flippity flip; We actually don't know what this does #Google what it does instead of writing a useless comment.
             self.clock.tick(self.settings.FPS) #initalizes frame rate
+            self.frame_count += 1
 
 
 game = Game() #Define gaem as Gaem
