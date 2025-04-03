@@ -14,10 +14,11 @@ class Player:
         """self.rect = pygame.Rect(0,0,15,15) #make da hitbox
         self.rect.center = game.rect.center"""
         self.inventory = [] #mechanic: only FIVE items at a time
-
-        self.IMAGE = pygame.image.load('sprites\manFace_More.png').convert()
+        self.base_IMAGE = pygame.image.load('sprites\manWalk\manwalk-0.png').convert()
+        self.IMAGE = pygame.transform.scale(self.base_IMAGE, (64,64))
         self.rect = self.IMAGE.get_rect()
         self.rect.center = (200, 300)
+        
 
 
         #We have to initialize the directions, I guess...
@@ -29,6 +30,7 @@ class Player:
 
     def draw(self,game):
         """Draw da player"""
+
         game.screen.blit(self.IMAGE, self.rect)
 
         #get all of dis movement down below
