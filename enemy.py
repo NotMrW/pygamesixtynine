@@ -10,6 +10,7 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, game):
         """Initialize da Enemies"""
         super().__init__()
+        self.game = game
         self.settings = game.settings
         spawn = random.choice(['top', 'bottom', 'left', 'right'])
         if spawn == 'top':
@@ -25,8 +26,14 @@ class Enemy(pygame.sprite.Sprite):
             self.x = self.settings.screen_WIDTH
             self.y = random.randint(0, self.settings.screen_HEIGHT)
 
-        self.color = (0, 255, 0)
-        self.rect = pygame.Rect(self.x, self.y, 20, 20)  # Corrected to pygame.Rect
+        self.spritesheet = SpriteSheet("sprites\zombWalk.png")
+        self.sprites = self.spritesheet.get_images(0,0,32,32,8)
+        self.image = self.sprites[0]
+        
+        self.rect = self.image.get_rect()
+        self.rect.center = game.rect.center
+
+        self.frame = 0
 
     def update(self, player):
         """Update the Enemies"""
@@ -46,6 +53,10 @@ class Enemy(pygame.sprite.Sprite):
             
             self.rect.topleft = (self.x, self.y)
 
+        if self.game.frame_count % 15 == 0:
+            self.frame = (self.frame+1)% len(self.sprites)
+        self.image = self.sprites[self.frame]
+
     def draw(self, game):
         """Draw them little shits"""
-        pygame.draw.rect(game.screen, self.color, self.rect)
+        game.screen.blit(self.image, self.rect.topleft) 

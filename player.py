@@ -45,6 +45,8 @@ class Player:
         self.image = self.sprites[self.frame]
         if self.moving_down == True:
             self.rect.y += self.settings.player_SPEED
+            backwards_image = pygame.transform.rotate(self.image, 180)
+            self.game.screen.blit(backwards_image, self.rect.topleft)
         if self.moving_left == True:
             self.rect.x -= self.settings.player_SPEED
         if self.moving_up == True:
