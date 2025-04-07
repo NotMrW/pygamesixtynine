@@ -1,6 +1,7 @@
 #import modules
 import random
 import pygame
+from pygame import mixer
 
 #import classes from other files
 from settings import Settings
@@ -14,21 +15,33 @@ class Game():
     frame_count = 0
     def __init__(self):
         """Initialize da Gaem"""
+        mixer.init()
+        mixer.music.load("")
+        mixer.music.set_volume(0.7)
+        mixer.music.play()
         self.settings = Settings() #initialize settings
         self.clock = pygame.time.Clock() #get a clock going
         self.screen = pygame.display.set_mode((self.settings.screen_WIDTH, self.settings.screen_HEIGHT)) #set the screen up
         self.rect = self.screen.get_rect() #get that rect
         pygame.display.set_caption("Try me") #name game window
-         
+        
+        self.score = 0
+        pygame.font.init()
+        self.font = pygame.font.Font(None, 36) #get a font for the score
+        self.score_surface = self.font.render(str(self.score), True, (255, 255, 255)) #render the score as a surface
+
         self.player = Player(self) #initialize player
 
         self.bullets = pygame.sprite.Group() #stuff the bulltes in one, plural group
         self.enemies = pygame.sprite.Group() #Get the little shits into a plural group
-        self.enemy_number = 0
+        self.enemy_number = len(self.enemies)
+        self.dead_enemy_number = self.score
+        self.enemies_spawned = 0
 
         self.wave_number = 1
         self.spawn_counter = 0
         self.level_threshold = self.wave_number * 100
+
 
         self.score = 0
         pygame.font.init()
@@ -81,9 +94,9 @@ class Game():
             if killenemy_collisions:
                 self.score += 1
                 self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
-                self.enemy_number -=1
+                self.dead_enemy_number = self.score
 
-            """bullet = Bullet(self) #stuff the bullet into a variable
+            bullet = Bullet(self) #stuff the bullet into a variable
             self.bullets.add(bullet) #stuff the bullet variable into a plural list
             for bullet in self.bullets: #check dem bullets
                 if bullet.rect.left > self.settings.screen_WIDTH or bullet.rect.right < 0: #kill the bullets if they go off-screen
@@ -91,7 +104,7 @@ class Game():
                 if bullet.rect.top > self.settings.screen_HEIGHT or bullet.rect.bottom < 0: #kill the bullets if they go off-screen, twice
                     bullet.kill() #KILL THEM ALL
                 bullet.draw(self) #Draw moar bullet
-                bullet.update() #Updates them there bullets"""
+                bullet.update() #Updates them there bullets
             
             enemy = Enemy(self) #just stuff the enemies into a single variable, this is beyond explaination
 
@@ -99,18 +112,23 @@ class Game():
             
             self.player.update()
             self.player.draw(self) #draw the player
-            if random.random() >.8 and self.enemy_number < self.level_threshold: #Oh, we have GAMBLING?! RANDOMIZATION?!
+            if random.random() >.8 and self.enemies_spawned < self.level_threshold: #Oh, we have GAMBLING?! RANDOMIZATION?!
                 self.enemies.add(enemy) #spawn the cannon fodder
-                self.enemy_number +=1
+                self.enemies_spawned += 1
             for enemy in self.enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
                 #if random.random() < self.settings.ENEMY_FLASH_RATE: #Hmm...
                 enemy.draw(self) #OH, that makes more sense in terms of "flash_rate"
                 enemy.update(self.player) #draw those little shits
             pygame.display.flip() #flippity flip; We actually don't know what this does #Google what it does instead of writing a useless comment.
-            
+            self.enemy_number = len(self.enemies)
+            if self.score == self.level_threshold:
+                self.wave_number += 1
+                self.enemies_spawned = 0
+                self.level_threshold = self.wave_number*100
             self.clock.tick(self.settings.FPS) #initalizes frame rate
             self.frame_count += 1
-            print(self.enemy_number)
+            print(self.dead_enemy_number, self.enemy_number, self.enemies_spawned, self.wave_number)
+
 
 game = Game() #Define gaem as Gaem
 game.run() #Run dat shit

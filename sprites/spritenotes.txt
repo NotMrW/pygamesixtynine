@@ -2,3 +2,5 @@ slash is 15x15px
 radiobig and machete is 48x48px
 everything else is 32x32px im pretty sure
 otherwise idk figure it out programmer nerds
+
+how bout no?
