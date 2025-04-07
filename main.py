@@ -135,13 +135,13 @@ class Game():
             for bigenemy in self.big_enemies:
                 bigenemy.draw(self)
                 bigenemy.update(self.player)
-            """if random.random() >.8 and self.enemies_spawned < self.level_threshold: #Oh, we have GAMBLING?! RANDOMIZATION?!
+            if random.random() >.8 and self.enemies_spawned < self.level_threshold: #Oh, we have GAMBLING?! RANDOMIZATION?!
                 self.enemies.add(enemy) #spawn the cannon fodder
                 self.enemies_spawned += 1
             for enemy in self.enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
                 #if random.random() < self.settings.ENEMY_FLASH_RATE: #Hmm...
                 enemy.draw(self) #OH, that makes more sense in terms of "flash_rate"
-                enemy.update(self.player) #draw those little shits"""
+                enemy.update(self.player) #draw those little shits
             pygame.display.flip() #flippity flip; We actually don't know what this does #Google what it does instead of writing a useless comment.
             
             if self.score >= self.level_threshold: #check if score == level score threshold
