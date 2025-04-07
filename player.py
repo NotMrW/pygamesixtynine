@@ -16,7 +16,6 @@ class Player:
         self.spritesheet = SpriteSheet("sprites\manWalk.png")
         self.sprites = self.spritesheet.get_images(0,0,32,32,8)
         self.image = self.sprites[0]
-        self.inventory = [] #mechanic: only FIVE items at a time
         self.rect = self.image.get_rect()
         self.rect.center = game.rect.center
         
@@ -59,20 +58,6 @@ class Player:
         """check if I should die yet"""
         #how tf do we check collisions for Player/Little_Shit?
 
-    
-    def check_hidden(self, game, map):
-        """Hidden? Hidden."""
-        #Need to check Player/Hiding_Place collisions
-
-
-    def pickUp(self, inv, newItem):
-        """Too many items, I am now overencumbered, damn"""
-        if len(inv) >= 5:
-            pass
-        else:
-            inv.append(newItem)
-            pass
-        return inv
 
     def __str__(self):
         return f"Player at {self.x, self.y} - Rect: {self.rect.topleft}"

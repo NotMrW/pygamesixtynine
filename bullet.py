@@ -21,15 +21,16 @@ class Bullet(pygame.sprite.Sprite):
         self.direction = self.get_direction(game) #WHICH WAY WE HEADED?
  
     def get_direction(self, game):
-        """'Which wey do I go?'"""
-        mouse_at_fire = pygame.mouse.get_pos() #GO TO THAT WIERD TRIANGLE!
-        distance = [ #How far?
-            mouse_at_fire[0] - game.player.x, #That far horizontally
-            mouse_at_fire[1] - game.player.y #that far vertically
+        """Calculate the direction of the bullet based on mouse position relative to the player."""
+        mouse_at_fire = pygame.mouse.get_pos()  # Get mouse position
+        distance = [
+            mouse_at_fire[0] - self.x,  # Use bullet's x position
+            mouse_at_fire[1] - self.y   # Use bullet's y position
         ]
-        normalize = math.sqrt(distance[0]**2 + distance[1]**2) #normalize dat sexy distance
-        self.direction = [distance[0]/normalize, distance[1]/normalize] #OHH, so that's the direction we're going...
-        return self.direction #Direction received, firing in...fuck it
+        normalize = math.sqrt(distance[0]**2 + distance[1]**2)  # Normalize the distance
+        if normalize == 0:  # Prevent division by zero
+            return [0, 0]
+        return [distance[0] / normalize, distance[1] / normalize]  # Return normalized direction
  
     def draw(self, game):
         """FIRE!"""
