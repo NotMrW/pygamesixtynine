@@ -9,13 +9,15 @@ class Settings():
 
         #more setting sorting
         self.player_SPEED = 3 #Damn, speed
-        self.big_boi_SPEED = self.player_SPEED/2
+        self.big_boi_SPEED = self.player_SPEED/2 #original speed: HALF of player's speed
+        self.KNOCKBACK_AMOUNT = 20
 
         #Just some more sorting to find stats easier, did you expect more?
         self.bullet_SPEED = 20 #SPEED
 
         #even more sorting, is this getting old yet?
         self.ENEMY_FLASH_RATE = .01 #flashy flashy
-
+        self.spawnrate = 0.8
+        
         #more sorting? Ugh
         self.SCALE_FACTOR = 1 #Scale multiplier

@@ -27,14 +27,18 @@ class Enemy(pygame.sprite.Sprite):
             self.x = self.settings.screen_WIDTH
             self.y = random.randint(0, self.settings.screen_HEIGHT)
 
-        self.spritesheet = SpriteSheet("sprites\zombWalk.png")
-        self.sprites = self.spritesheet.get_images(0,0,32,32,8)
+        self.spritesheet = SpriteSheet(r"sprites\radioBig.png")
+        self.sprites = self.spritesheet.get_images(0,0,32,32,1)
         self.image = self.sprites[0]
         
         self.rect = self.image.get_rect()
-        self.rect.center = game.rect.center
+        self.rect.center = (-1000,-1000)
 
         self.frame = 0
+
+    def knockback (self, bullet):
+        self.x+= bullet.direction[0]*self.settings.KNOCKBACK_AMOUNT
+        self.y+= bullet.direction[1]*self.settings.KNOCKBACK_AMOUNT
 
     def update(self, player):
         """Update the Enemies"""
@@ -65,35 +69,29 @@ class Enemy(pygame.sprite.Sprite):
 
 
 class BigEnemy(pygame.sprite.Sprite):
+    count = 0
     def __init__(self, game):
         """Initialize da Fucker"""
-        super().__init__()
+        super().__init__(game)
         self.game = game
-        self.settings = game.settings
+
         self.hp = 3
         self.speed = self.settings.big_boi_SPEED
-        spawn = random.choice(['top', 'bottom', 'left', 'right'])
-        if spawn == 'top':
-            self.x = random.randint(0, self.settings.screen_WIDTH)
-            self.y = 0
-        elif spawn == 'bottom':
-            self.x = random.randint(0, self.settings.screen_WIDTH)
-            self.y = self.settings.screen_HEIGHT
-        elif spawn == 'left':
-            self.x = 0
-            self.y = random.randint(0, self.settings.screen_HEIGHT)
-        elif spawn == 'right':
-            self.x = self.settings.screen_WIDTH
-            self.y = random.randint(0, self.settings.screen_HEIGHT)
+
 
         self.spritesheet = SpriteSheet(r"sprites\bigguyWalk.png")
         self.sprites = self.spritesheet.get_images(0,0,48,48,8)
         self.image = self.sprites[0]
         
         self.rect = self.image.get_rect()
-        self.rect.center = game.rect.center
+        self.rect.center = (-1000,-1000)
 
         self.frame = 0
+        self.count += 1 
+
+    def knockback (self, bullet):
+        self.x+= bullet.direction[0]*self.settings.KNOCKBACK_AMOUNT
+        self.y+= bullet.direction[1]*self.settings.KNOCKBACK_AMOUNT
 
     def update(self, player):
         """Update the BEEG mf"""
@@ -119,4 +117,7 @@ class BigEnemy(pygame.sprite.Sprite):
 
     def draw(self, game):
         """Draw them little shits"""
-        game.screen.blit(self.image, self.rect.topleft) 
+        game.screen.blit(self.image, self.rect.topleft)
+
+    def __del__(self):
+        self.count -= 1 

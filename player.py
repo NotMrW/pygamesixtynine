@@ -1,6 +1,5 @@
 #import dat other file bullshit
 from settings import Settings
-from enemy import Enemy
 from spritesheet import SpriteSheet
 
 #import dem modules
@@ -32,13 +31,11 @@ class Player:
         self.frame = 0
 
 
-    def draw(self,game):
-        """Draw da player"""
-
+    def blit(self,game):
         game.screen.blit(self.image, self.rect.topleft) #blit dat shit
 
     def update(self):
-        #get all of dis movement down below
+        """Get all of the movement for Player updated"""
         if self.game.frame_count % 15 == 0:
             self.frame = (self.frame+1)% len(self.sprites)
         self.image = self.sprites[self.frame]
@@ -52,6 +49,7 @@ class Player:
             self.rect.y -= self.settings.player_SPEED
         if self.moving_right == True:
             self.rect.x += self.settings.player_SPEED
+        
 
 
     def die(self, enemy):

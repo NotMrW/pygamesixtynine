@@ -2,6 +2,7 @@
 import random
 import pygame
 from pygame import mixer
+import math
 
 #import classes from other files
 from settings import Settings
@@ -35,17 +36,18 @@ class Game():
         self.player = Player(self) #initialize player
 
         self.bullets = pygame.sprite.Group() #stuff the bulltes in one, plural group
-        self.enemies = pygame.sprite.Group() #Get the little shits into a plural group
-        self.big_enemies = pygame.sprite.Group()
+        self.enemies = pygame.sprite.Group() #Get the little shits into a plural groupww
 
-        self.dead_enemy_number = self.score
+        self.bigenemies_spawned = 0
+
         self.enemies_spawned = 0
+        self.enemies_killed = 0
 
         self.wave_number = 1
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
-        self.level_threshold = self.wave_number * 10
-
+        self.level_threshold = 5 + 5*self.wave_number
+        self.biglevel_threshold = math.floor(self.wave_number // 5)
 
         self.score = 0
         pygame.font.init()
@@ -61,6 +63,7 @@ class Game():
     def run(self): 
         """"Da function to run da gaem"""
         while self.running: #we use "running" value here for loop? Huh, neat
+            print(self.settings.spawnrate)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False #We always need to be able to run from the gaem
@@ -103,29 +106,43 @@ class Game():
             game.screen.blit(self.wave_surface, (50, 50))
 
             #killplayer_collisions = pygame.sprite.spritecollide(self.player, self.enemies, True) #Player/Little_shit collisions
-            hurtenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False) #Bullet/Little_shit collisions
-            hurtbigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, False)
+            bullet_enemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False) #Bullet/Little_shit collisions
+            bullet_bigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, False)
 
-#Broken code to ONLY kill enemies when their HP is 0 or lower
-            if hurtenemy_collisions:
-                total_enemies_hit = sum(len(enemies) for enemies in hurtenemy_collisions.values())
-                for enemy in self.enemies:
-                    hurtenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, True)
-                    self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
-                    self.dead_enemy_number = self.score
-
+            
+            if bullet_enemy_collisions:
+                total_enemies_hit = list(bullet_enemy_collisions.values())[0]
+                for enemy in total_enemies_hit:
+                    enemy.hp -= 1
+                    enemy.knockback(bullet)
+                    if enemy.hp <= 0:
+                        enemy.kill()
+                        self.enemies_killed+=1
+                        self.score+=1
+                        self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
+                        
+ 
+            if bullet_bigenemy_collisions: #if bullets collided with Big Bois...
+                total_enemies_hit = list(bullet_bigenemy_collisions.values())[0] #fill a list with big enemy collisions' values
+                for bigenemy in total_enemies_hit: #loop through those listed collisions
+                    bigenemy.hp -= 1 #subtract HP from EACH Big Boi
+                    bigenemy.knockback(bullet)
+                    if bigenemy.hp <= 0: #if the HP of a specific big boi is 0 or lower...
+                        bigenemy.kill() #ded
+                        self.score+=3 #one point!
+                        self.score_surface = self.font.render(str(self.score), True, (255, 255, 255)) 
 #old code
-            """if killenemy_collisions: 
-                
+            """if bullet_enemy_collisions:
+
                 self.score += total_enemies_hit  # Add the total to the score
                 self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
                 self.dead_enemy_number = self.score
-            if killbigenemy_collisions:
+            if bullet_bigenemy_collisions:
                 total_bigenemies_hit = sum(len(bigenemies) for bigenemies in killbigenemy_collisions.values())
                 self.score += total_bigenemies_hit*3  # Add the total to the score
                 self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
-                self.dead_enemy_number = self.score """          
-
+                self.dead_enemy_number = self.score          
+"""
 
             for bullet in self.bullets: #check dem bullets
                 if bullet.rect.left > self.settings.screen_WIDTH or bullet.rect.right < 0: #kill the bullets if they go off-screen
@@ -135,37 +152,41 @@ class Game():
                 bullet.draw(self) #Draw moar bullet
                 bullet.update() #Updates them there bullets
             
-            enemy = Enemy(self) #just stuff the enemies into a single variable, this is beyond explaination
-            bigenemy = BigEnemy(self)
 
-
+            enemy = Enemy(self) 
             
-            self.player.update()
-            self.player.draw(self) #draw the player
-            print(self.enemies_spawned <= self.level_threshold, self.enemies_spawned, self.level_threshold)
+            
+            self.player.update() #update the player, mainly its position, tho
+            self.player.blit(self) #draw the player
+            
+            if self.enemies_spawned > 0.3*self.level_threshold:
+                self.settings.spawnrate = 1
+            if (self.enemies_spawned - self.enemies_killed) < 0.3*self.level_threshold:
+                self.settings.spawnrate = 0.8
 
-            if len(self.big_enemies) < 1:
-                self.big_enemies.add(bigenemy)
-            for bigenemy in self.big_enemies:
-                bigenemy.draw(self)
-                bigenemy.update(self.player)
-            if random.random() >.8 and self.enemies_spawned < self.level_threshold: #Oh, we have GAMBLING?! RANDOMIZATION?!
-                self.enemies.add(enemy) #spawn the cannon fodder
-                self.enemies_spawned += 1
+            if len(self.big_enemies) < self.biglevel_threshold and self.bigenemies_spawned < self.biglevel_threshold: #if the length of them big bois is higher than the threshold for em...
+                self.enemies.add(BigEnemy(self)) #add them to the list
+                self.bigenemies_spawned += 1 #increment the spawn counter
+
+            if random.random() >self.settings.spawnrate and self.enemies_spawned < self.level_threshold: #if the Gambler is lucky...
+                self.enemies.add(enemy) #add the cannon fodder
+                self.enemies_spawned += 1 #add to the valuse of enemies spawned [DEBUGGING]
             for enemy in self.enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
-                #if random.random() < self.settings.ENEMY_FLASH_RATE: #Hmm...
-                enemy.draw(self) #OH, that makes more sense in terms of "flash_rate"
-                enemy.update(self.player) #draw those little shits
-            pygame.display.flip() #flippity flip; We actually don't know what this does #Google what it does instead of writing a useless comment.
+                #if random.random() < self.settings.ENEMY_FLASH_RATE: 
+                enemy.draw(self) #Spawn the little twits
+                enemy.update(self.player) #update those little shits
+            pygame.display.flip() #updtae the ENTIRE display
             
-            if self.score >= self.level_threshold: #check if score == level score threshold
+            if self.enemies_killed >= self.level_threshold: #check if score == level score threshold
                 self.wave_number += 1
                 self.enemies_spawned = 0
-                self.previous_level_threshold = self.level_threshold
-                self.level_threshold = self.wave_number*10+self.previous_level_threshold
+                self.enemies_killed = 0
+                self.level_threshold = 5 + 5*self.wave_number
+                self.biglevel_threshold = math.floor(self.wave_number // 5)
+                self.bigenemies_spawned = 0
             self.clock.tick(self.settings.FPS) #initalizes frame rate
             self.frame_count += 1
 
 
-game = Game() #Define gaem as Gaem
-game.run() #Run dat shit
+game = Game() 
+game.run()

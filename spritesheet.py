@@ -6,8 +6,8 @@ class SpriteSheet():
 
     SS_REFERENCE = (457, 1)
     def __init__(self, file_name):
-        self.sprite_sheet = pygame.image.load(file_name).convert()
-        
+        self.sprite_sheet = pygame.image.load(file_name).convert_alpha()
+
         
 
     def get_image(self, x, y, width, height):
