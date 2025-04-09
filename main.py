@@ -76,7 +76,7 @@ class Game():
                     if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                         self.player.moving_down = True
                     if event.key == pygame.K_SPACE:
-                        bullet  = Bullet(self)
+                        bullet = Bullet(self)
                         self.bullets.add(bullet)
 
                 if event.type == pygame.KEYUP:
@@ -88,6 +88,11 @@ class Game():
                         self.player.moving_up = False
                     if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                         self.player.moving_down = False
+                
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == pygame.BUTTON_LEFT:
+                        bullet = Bullet(self)
+                        self.bullets.add(bullet)
                         
 
             bg_image = pygame.image.load('sprites\grasstile.png')
@@ -98,11 +103,20 @@ class Game():
             game.screen.blit(self.wave_surface, (50, 50))
 
             #killplayer_collisions = pygame.sprite.spritecollide(self.player, self.enemies, True) #Player/Little_shit collisions
-            killenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, True) #Bullet/Little_shit collisions
-            killbigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, True)
+            hurtenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False) #Bullet/Little_shit collisions
+            hurtbigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, False)
 
-            if killenemy_collisions:
-                total_enemies_hit = sum(len(enemies) for enemies in killenemy_collisions.values())
+#Broken code to ONLY kill enemies when their HP is 0 or lower
+            if hurtenemy_collisions:
+                total_enemies_hit = sum(len(enemies) for enemies in hurtenemy_collisions.values())
+                for enemy in self.enemies:
+                    hurtenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, True)
+                    self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
+                    self.dead_enemy_number = self.score
+
+#old code
+            """if killenemy_collisions: 
+                
                 self.score += total_enemies_hit  # Add the total to the score
                 self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
                 self.dead_enemy_number = self.score
@@ -110,7 +124,7 @@ class Game():
                 total_bigenemies_hit = sum(len(bigenemies) for bigenemies in killbigenemy_collisions.values())
                 self.score += total_bigenemies_hit*3  # Add the total to the score
                 self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
-                self.dead_enemy_number = self.score                
+                self.dead_enemy_number = self.score """          
 
 
             for bullet in self.bullets: #check dem bullets

@@ -71,6 +71,7 @@ class BigEnemy(pygame.sprite.Sprite):
         self.game = game
         self.settings = game.settings
         self.hp = 3
+        self.speed = self.settings.big_boi_SPEED
         spawn = random.choice(['top', 'bottom', 'left', 'right'])
         if spawn == 'top':
             self.x = random.randint(0, self.settings.screen_WIDTH)
@@ -107,8 +108,8 @@ class BigEnemy(pygame.sprite.Sprite):
             if normalize > 0:  # Prevent division by zero
                 self.direction = [distance[0] / normalize, distance[1] / normalize]
                 speed = 2  # Set a speed for the enemy
-                self.x += self.direction[0] * speed
-                self.y += self.direction[1] * speed
+                self.x += self.direction[0] * self.speed
+                self.y += self.direction[1] * self.speed
             
             self.rect.topleft = (self.x, self.y)
 

@@ -9,6 +9,7 @@ class Settings():
 
         #more setting sorting
         self.player_SPEED = 3 #Damn, speed
+        self.big_boi_SPEED = self.player_SPEED/2
 
         #Just some more sorting to find stats easier, did you expect more?
         self.bullet_SPEED = 20 #SPEED
