@@ -31,12 +31,13 @@ class Game():
         pygame.font.init()
         self.font = pygame.font.Font(None, 36) #get a font for the score
         self.score_surface = self.font.render(str(self.score), True, (255, 255, 255)) #render the score as a surface
+        self.death_surface = self.font.render("YOU DIED", True, (255, 255, 255))
 
 
         self.player = Player(self) #initialize player
 
         self.bullets = pygame.sprite.Group() #stuff the bulltes in one, plural group
-        self.enemies = pygame.sprite.Group() #Get the little shits into a plural groupww
+        self.enemies = pygame.sprite.Group() #Get the little shits into a plural group
         self.big_enemies = pygame.sprite.Group()
 
         self.bigenemies_spawned = 0
@@ -44,7 +45,7 @@ class Game():
         self.enemies_spawned = 0
         self.enemies_killed = 0
 
-        self.wave_number = 5
+        self.wave_number = 1
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -64,6 +65,7 @@ class Game():
     def run(self): 
         """"Da function to run da gaem"""
         while self.running: #we use "running" value here for loop? Huh, neat
+            print(self.player.HP, self.player.rect.center)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False #We always need to be able to run from the gaem
@@ -105,11 +107,9 @@ class Game():
             self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255))
             game.screen.blit(self.wave_surface, (50, 50))
 
-            #killplayer_collisions = pygame.sprite.spritecollide(self.player, self.enemies, True) #Player/Little_shit collisions
             bullet_enemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False) #Bullet/Little_shit collisions
             bullet_bigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, False)
 
-            
             if bullet_enemy_collisions:
                 total_enemies_hit = list(bullet_enemy_collisions.values())[0]
                 for enemy in total_enemies_hit:
@@ -164,20 +164,32 @@ class Game():
                 self.enemies_spawned += 1 #add to the valuse of enemies spawned [DEBUGGING]
             for enemy in self.enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
                 #if random.random() < self.settings.ENEMY_FLASH_RATE: 
-                enemy.draw(self) #Spawn the little twits
+                enemy.draw(self)
                 enemy.update(self.player) #update those little shits
+                enemy.check_collide(self.player)
+                if enemy.hp <= 0:
+                        enemy.kill()
+                        self.enemies_killed+=1
+            if self.player.HP <= 0:
+                self.screen.blit(self.death_surface, (400,500))
             pygame.display.flip() #updtae the ENTIRE display
             
-            if self.enemies_killed >= self.level_threshold: #check if score == level score threshold
-                self.wave_number += 1
+            if self.enemies_killed >= self.level_threshold: 
+                self.wave_number += 1 
                 self.enemies_spawned = 0
                 self.enemies_killed = 0
-                self.level_threshold = 5 + 5*self.wave_number
-                self.biglevel_threshold = math.floor(self.wave_number // 5)
+                if self.wave_number <= 10:
+                    self.level_threshold = 5 + 5*self.wave_number 
+                elif self.wave_number > 10: 
+                    self.level_threshold = 5 + 7*self.wave_number
+                if self.wave_number <= 10: 
+                    self.biglevel_threshold = math.floor(self.wave_number // 5)
+                elif self.wave_number > 10: 
+                    self.biglevel_threshold = math.floor(self.wave_number // 3) 
                 self.bigenemies_spawned = 0
-            self.clock.tick(self.settings.FPS) #initalizes frame rate
-            self.frame_count += 1
-
+            self.clock.tick(self.settings.FPS) 
+            self.frame_count += 1 
+ 
 
 game = Game() 
 game.run()

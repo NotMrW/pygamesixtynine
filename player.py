@@ -12,9 +12,11 @@ class Player:
         self.settings =  game.settings #initialize player's settings
         self.x = self.settings.screen_WIDTH / 2 #center horizontally
         self.y = self.settings.screen_HEIGHT / 2 #center vertically
+        self.HP = 50
         self.spritesheet = SpriteSheet("sprites\manWalk.png")
         self.sprites = self.spritesheet.get_images(0,0,32,32,8)
         self.image = self.sprites[0]
+        self.death_image = ("sprites/manFace.png")
         self.rect = self.image.get_rect()
         self.rect.center = game.rect.center
         
@@ -50,13 +52,6 @@ class Player:
         if self.moving_right == True:
             self.rect.x += self.settings.player_SPEED
         
-
-
-    def die(self, enemy):
-        """check if I should die yet"""
-        #how tf do we check collisions for Player/Little_Shit?
-
-
     def __str__(self):
         return f"Player at {self.x, self.y} - Rect: {self.rect.topleft}"
     #how will we add a flashlight mechanic?

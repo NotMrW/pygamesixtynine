@@ -3,8 +3,8 @@ class Settings():
         """Initialize da Settings"""
 
         #sorting settings based on what they're related to
-        self.screen_HEIGHT = 800 #screen width
-        self.screen_WIDTH = 1000 #screen height, what? Expected something funny?
+        self.screen_HEIGHT = 800 #screen height
+        self.screen_WIDTH = 1000 #screen width what? Expected something funny?
         self.FPS = 60 #FPS modulator
 
         #more setting sorting
@@ -21,3 +21,6 @@ class Settings():
         
         #more sorting? Ugh
         self.SCALE_FACTOR = 1 #Scale multiplier
+
+        #just for items and their attributes
+#        self.medkit_HEAL
