@@ -27,7 +27,7 @@ class Enemy(pygame.sprite.Sprite):
             self.x = self.settings.screen_WIDTH
             self.y = random.randint(0, self.settings.screen_HEIGHT)
 
-        self.spritesheet = SpriteSheet(r"sprites\radioBig.png")
+        self.spritesheet = SpriteSheet(r"sprites/zombWalk.png")
         self.sprites = self.spritesheet.get_images(0,0,32,32,1)
         self.image = self.sprites[0]
         
@@ -72,8 +72,9 @@ class BigEnemy(pygame.sprite.Sprite):
     count = 0
     def __init__(self, game):
         """Initialize da Fucker"""
-        super().__init__(game)
+        super().__init__()
         self.game = game
+        self.settings = self.game.settings
 
         self.hp = 3
         self.speed = self.settings.big_boi_SPEED
@@ -85,6 +86,20 @@ class BigEnemy(pygame.sprite.Sprite):
         
         self.rect = self.image.get_rect()
         self.rect.center = (-1000,-1000)
+        spawn = random.choice(['top', 'bottom', 'left', 'right'])
+        if spawn == 'top':
+            self.x = random.randint(0, self.settings.screen_WIDTH)
+            self.y = 0
+        elif spawn == 'bottom':
+            self.x = random.randint(0, self.settings.screen_WIDTH)
+            self.y = self.settings.screen_HEIGHT
+        elif spawn == 'left':
+            self.x = 0
+            self.y = random.randint(0, self.settings.screen_HEIGHT)
+        elif spawn == 'right':
+            self.x = self.settings.screen_WIDTH
+            self.y = random.randint(0, self.settings.screen_HEIGHT)
+
 
         self.frame = 0
         self.count += 1 

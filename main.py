@@ -37,13 +37,14 @@ class Game():
 
         self.bullets = pygame.sprite.Group() #stuff the bulltes in one, plural group
         self.enemies = pygame.sprite.Group() #Get the little shits into a plural groupww
+        self.big_enemies = pygame.sprite.Group()
 
         self.bigenemies_spawned = 0
 
         self.enemies_spawned = 0
         self.enemies_killed = 0
 
-        self.wave_number = 1
+        self.wave_number = 5
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -63,7 +64,6 @@ class Game():
     def run(self): 
         """"Da function to run da gaem"""
         while self.running: #we use "running" value here for loop? Huh, neat
-            print(self.settings.spawnrate)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False #We always need to be able to run from the gaem
@@ -131,18 +131,6 @@ class Game():
                         bigenemy.kill() #ded
                         self.score+=3 #one point!
                         self.score_surface = self.font.render(str(self.score), True, (255, 255, 255)) 
-#old code
-            """if bullet_enemy_collisions:
-
-                self.score += total_enemies_hit  # Add the total to the score
-                self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
-                self.dead_enemy_number = self.score
-            if bullet_bigenemy_collisions:
-                total_bigenemies_hit = sum(len(bigenemies) for bigenemies in killbigenemy_collisions.values())
-                self.score += total_bigenemies_hit*3  # Add the total to the score
-                self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
-                self.dead_enemy_number = self.score          
-"""
 
             for bullet in self.bullets: #check dem bullets
                 if bullet.rect.left > self.settings.screen_WIDTH or bullet.rect.right < 0: #kill the bullets if they go off-screen
@@ -154,7 +142,7 @@ class Game():
             
 
             enemy = Enemy(self) 
-            
+            big_enemy = BigEnemy(self)
             
             self.player.update() #update the player, mainly its position, tho
             self.player.blit(self) #draw the player
@@ -165,8 +153,11 @@ class Game():
                 self.settings.spawnrate = 0.8
 
             if len(self.big_enemies) < self.biglevel_threshold and self.bigenemies_spawned < self.biglevel_threshold: #if the length of them big bois is higher than the threshold for em...
-                self.enemies.add(BigEnemy(self)) #add them to the list
+                self.big_enemies.add(BigEnemy(self)) #add them to the list
                 self.bigenemies_spawned += 1 #increment the spawn counter
+            for big_enemy in self.big_enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
+                big_enemy.draw(self) #Spawn the little twits
+                big_enemy.update(self.player) #update those little shits
 
             if random.random() >self.settings.spawnrate and self.enemies_spawned < self.level_threshold: #if the Gambler is lucky...
                 self.enemies.add(enemy) #add the cannon fodder
