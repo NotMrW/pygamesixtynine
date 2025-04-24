@@ -12,7 +12,7 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__()
         self.game = game
         self.settings = game.settings
-        self.hp = 1
+        self.hp = 2
         spawn = random.choice(['top', 'bottom', 'left', 'right'])
         if spawn == 'top':
             self.x = random.randint(0, self.settings.screen_WIDTH)
@@ -28,7 +28,7 @@ class Enemy(pygame.sprite.Sprite):
             self.y = random.randint(0, self.settings.screen_HEIGHT)
 
         self.spritesheet = SpriteSheet(r"sprites/zombWalk.png")
-        self.sprites = self.spritesheet.get_images(0,0,32,32,1)
+        self.sprites = self.spritesheet.get_images(0,0,32,32,8)
         self.image = self.sprites[0]
         
         self.rect = self.image.get_rect()
@@ -40,7 +40,7 @@ class Enemy(pygame.sprite.Sprite):
         if player:
             if self.rect.colliderect(player.rect):
                 player.HP -= 1 #maybe we should add a damage variable?
-                self.hp -= 1
+                self.hp -= 2
 
     def knockback(self, bullet):
         self.x+= bullet.direction[0]*self.settings.KNOCKBACK_AMOUNT

@@ -10,6 +10,7 @@ from player import Player
 from enemy import Enemy
 from enemy import BigEnemy
 from bullet import Bullet
+from item import Medkit
 
 
 
@@ -46,7 +47,7 @@ class Game():
         self.enemies_spawned = 0
         self.enemies_killed = 0
 
-        self.wave_number = 5
+        self.wave_number = 1
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -66,6 +67,7 @@ class Game():
     def run(self): 
         """"Da function to run da gaem"""
         while self.running: #we use "running" value here for loop? Huh, neat
+            print(self.player.HP)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False #We always need to be able to run from the gaem
@@ -98,8 +100,9 @@ class Game():
                     if event.button == pygame.BUTTON_LEFT:
                         bullet = Bullet(self)
                         self.bullets.add(bullet)
-                        
+            
 
+            
             bg_image = pygame.image.load('sprites\grasstile.png')
             bg_image = pygame.transform.scale(bg_image, (self.settings.screen_WIDTH, self.settings.screen_HEIGHT))
             game.screen.blit(bg_image, (0, 0))
@@ -120,8 +123,9 @@ class Game():
                         self.enemies_killed+=1
                         self.score+=1
                         self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
+                        if random.random() <= 0.02:
+                            self.medkits.add(medkit)
                         
- 
             if bullet_bigenemy_collisions: #if bullets collided with Big Bois...
                 total_enemies_hit = list(bullet_bigenemy_collisions.values())[0] #fill a list with big enemy collisions' values
                 for bigenemy in total_enemies_hit: #loop through those listed collisions
@@ -140,9 +144,13 @@ class Game():
                 bullet.draw(self) #Draw moar bullet
                 bullet.update() #Updates them there bullets
             
+            for medkit in self.medkits:
+                medkit.draw(self)
+                medkit.heal_player(self.player)
 
             enemy = Enemy(self) 
             big_enemy = BigEnemy(self)
+            medkit = Medkit(self)
             
             self.player.update() #update the player, mainly its position, tho
             self.player.blit(self) #draw the player
@@ -165,14 +173,18 @@ class Game():
             if random.random() >self.settings.spawnrate and self.enemies_spawned < self.level_threshold: #if the Gambler is lucky...
                 self.enemies.add(enemy) #add the cannon fodder
                 self.enemies_spawned += 1 #add to the valuse of enemies spawned [DEBUGGING]
+
+
             for enemy in self.enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
                 #if random.random() < self.settings.ENEMY_FLASH_RATE: 
                 enemy.draw(self)
                 enemy.update(self.player) #update those little shits
                 enemy.check_collide(self.player)
                 if enemy.hp <= 0:
-                        enemy.kill()
-                        self.enemies_killed+=1
+                    enemy.kill()
+                    self.enemies_killed+=1
+            if self.player.HP > 50:
+                self.player.HP = 50
             if self.player.HP <= 0:
                 self.screen.fill("black")
                 self.screen.blit(self.death_surface, (self.settings.screen_WIDTH//2.25,self.settings.screen_HEIGHT//2))
