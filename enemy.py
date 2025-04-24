@@ -39,7 +39,7 @@ class Enemy(pygame.sprite.Sprite):
     def check_collide(self, player):
         if player:
             if self.rect.colliderect(player.rect):
-                player.HP -= 49 #maybe we should add a damage variable?
+                player.HP -= 1 #maybe we should add a damage variable?
                 self.hp -= 1
 
     def knockback(self, bullet):
@@ -109,6 +109,12 @@ class BigEnemy(pygame.sprite.Sprite):
 
         self.frame = 0
         self.count += 1 
+    
+    def check_collide(self, player):
+        if player:
+            if self.rect.colliderect(player.rect):
+                player.HP -= 1 #maybe we should add a damage variable?
+                self.hp -= 3
 
     def knockback (self, bullet):
         self.x+= bullet.direction[0]*self.settings.KNOCKBACK_AMOUNT

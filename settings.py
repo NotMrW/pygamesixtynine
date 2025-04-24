@@ -23,4 +23,4 @@ class Settings():
         self.SCALE_FACTOR = 1 #Scale multiplier
 
         #just for items and their attributes
-#        self.medkit_HEAL
+        self.medkit_HEAL = 25

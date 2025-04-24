@@ -25,7 +25,7 @@ class Game():
         self.clock = pygame.time.Clock() #get a clock going
         self.screen = pygame.display.set_mode((self.settings.screen_WIDTH, self.settings.screen_HEIGHT)) #set the screen up
         self.rect = self.screen.get_rect() #get that rect
-        pygame.display.set_caption("Try me") #name game window
+        pygame.display.set_caption("SpriteGame") #name game window
         
         self.score = 0
         pygame.font.init()
@@ -35,6 +35,7 @@ class Game():
 
 
         self.player = Player(self) #initialize player
+        self.medkits = pygame.sprite.Group()
 
         self.bullets = pygame.sprite.Group() #stuff the bulltes in one, plural group
         self.enemies = pygame.sprite.Group() #Get the little shits into a plural group
@@ -45,7 +46,7 @@ class Game():
         self.enemies_spawned = 0
         self.enemies_killed = 0
 
-        self.wave_number = 1
+        self.wave_number = 5
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -65,7 +66,6 @@ class Game():
     def run(self): 
         """"Da function to run da gaem"""
         while self.running: #we use "running" value here for loop? Huh, neat
-            print(self.player.HP, self.player.rect.center)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False #We always need to be able to run from the gaem
@@ -158,6 +158,9 @@ class Game():
             for big_enemy in self.big_enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
                 big_enemy.draw(self) #Spawn the little twits
                 big_enemy.update(self.player) #update those little shits
+                big_enemy.check_collide(self.player)
+                if big_enemy.hp <= 0:
+                    big_enemy.kill()
 
             if random.random() >self.settings.spawnrate and self.enemies_spawned < self.level_threshold: #if the Gambler is lucky...
                 self.enemies.add(enemy) #add the cannon fodder
@@ -171,13 +174,18 @@ class Game():
                         enemy.kill()
                         self.enemies_killed+=1
             if self.player.HP <= 0:
-                self.screen.blit(self.death_surface, (400,500))
+                self.screen.fill("black")
+                self.screen.blit(self.death_surface, (self.settings.screen_WIDTH//2.25,self.settings.screen_HEIGHT//2))
             pygame.display.flip() #updtae the ENTIRE display
             
             if self.enemies_killed >= self.level_threshold: 
                 self.wave_number += 1 
-                self.enemies_spawned = 0
+                self.enemies_spawned = 0 
                 self.enemies_killed = 0
+                """for enemy in self.enemies:
+                    enemy.kill()"""
+                for big_enemy in self.big_enemies:
+                    big_enemy.kill()
                 if self.wave_number <= 10:
                     self.level_threshold = 5 + 5*self.wave_number 
                 elif self.wave_number > 10: 
