@@ -116,7 +116,10 @@ class BigEnemy(pygame.sprite.Sprite):
     def check_collide(self, player):
         if player:
             if self.rect.colliderect(player.rect):
-                player.HP -= 1 #maybe we should add a damage variable?
+                if player.shield > 0:
+                    player.shield -=1
+                else:
+                    player.HP -= 1 #maybe we should add a damage variable?
                 self.hp -= 3
 
     def knockback (self, bullet):
@@ -161,8 +164,7 @@ class SpeedyBoi(pygame.sprite.Sprite):
         self.settings = self.game.settings
 
         self.hp = 1
-        self.speed = self.settings.self.speedy_boi_SPEED
-
+        self.speed = self.settings.speedy_boi_SPEED
 
         self.spritesheet = SpriteSheet(r"sprites\machete.png")
         self.sprites = self.spritesheet.get_images(0,0,48,48,8)
@@ -184,14 +186,16 @@ class SpeedyBoi(pygame.sprite.Sprite):
             self.x = self.settings.screen_WIDTH
             self.y = random.randint(0, self.settings.screen_HEIGHT)
 
-
         self.frame = 0
         self.count += 1 
     
     def check_collide(self, player):
         if player:
             if self.rect.colliderect(player.rect):
-                player.HP -= 1 #maybe we should add a damage variable?
+                if player.shield > 0:
+                    player.shield -= 2
+                else:
+                    player.HP -= 2 #maybe we should add a damage variable?
                 self.hp -= 1
 
     def knockback (self, bullet):

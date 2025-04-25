@@ -7,7 +7,7 @@ import math
 #import classes from other files
 from settings import Settings
 from player import Player
-from enemy import Enemy, BigEnemy
+from enemy import Enemy, BigEnemy, SpeedyBoi
 from bullet import Bullet
 from item import Medkit, Shield
 
@@ -39,20 +39,26 @@ class Game():
         self.medkits = pygame.sprite.Group()
         self.shields = pygame.sprite.Group()
 
-        self.bullets = pygame.sprite.Group() #stuff the bulltes in one, plural group
+        self.bullets = pygame.sprite.Group() #stuff the bullets in one, plural group
+
         self.enemies = pygame.sprite.Group() #Get the little shits into a plural group
         self.big_enemies = pygame.sprite.Group()
+        self.speedy_bois = pygame.sprite.Group()
 
         self.bigenemies_spawned = 0
 
         self.enemies_spawned = 0
         self.enemies_killed = 0
 
-        self.wave_number = 1
+        self.speedy_bois_spawned = 0
+        self.speedy_bois_killed = 0
+
+        self.wave_number = 7
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
         self.biglevel_threshold = math.floor(self.wave_number // 5)
+        self.speedylevel_threshold = 0+math.floor(self.wave_number//7)
 
         self.score = 0
         pygame.font.init()
@@ -113,6 +119,7 @@ class Game():
 
             bullet_enemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False) #Bullet/Little_shit collisions
             bullet_bigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, False)
+            bullet_speedy_collisions = pygame.sprite.groupcollide(self.bullets, self.speedy_bois, True, False)
 
             if bullet_enemy_collisions:
                 total_enemies_hit = list(bullet_enemy_collisions.values())[0]
@@ -131,6 +138,23 @@ class Game():
                             shield.rect.topleft = (enemy.x, enemy.y)
                             self.shields.add(shield)
                         
+            if bullet_speedy_collisions:
+                total_enemies_hit = list(bullet_speedy_collisions.values())[0]
+                for speedyboi in total_enemies_hit:
+                    speedyboi.hp -= 1
+                    speedyboi.knockback(bullet)
+                    if speedyboi.hp <= 0:
+                        speedyboi.kill()
+                        self.speedy_bois_killed +=1
+                        self.score+=1
+                        self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
+                        if random.random() <= 0.05:
+                            medkit.rect.topleft = (enemy.x, enemy.y)
+                            self.medkits.add(medkit)
+                        if random.random() <= 0.001:
+                            shield.rect.topleft = (enemy.x, enemy.y)
+                            self.shields.add(shield)
+
             if bullet_bigenemy_collisions: #if bullets collided with Big Bois...
                 total_enemies_hit = list(bullet_bigenemy_collisions.values())[0] #fill a list with big enemy collisions' values
                 for bigenemy in total_enemies_hit: #loop through those listed collisions
@@ -158,6 +182,7 @@ class Game():
 
             enemy = Enemy(self) 
             big_enemy = BigEnemy(self)
+            speedy_boi = SpeedyBoi(self)
             
             medkit = Medkit(self)
             shield = Shield(self)
@@ -183,7 +208,18 @@ class Game():
             if random.random() >self.settings.spawnrate and self.enemies_spawned < self.level_threshold: #if the Gambler is lucky...
                 self.enemies.add(enemy) #add the cannon fodder
                 self.enemies_spawned += 1 #add to the valuse of enemies spawned [DEBUGGING]
+            
+            if random.random() < 0.2 and self.speedy_bois_spawned < self.speedylevel_threshold:
+                self.speedy_bois.add(speedy_boi)
+                self.speedy_bois_spawned +=1
 
+            for speedy_boi in self.speedy_bois:
+                speedy_boi.draw(self)
+                speedy_boi.update(self.player)
+                speedy_boi.check_collide(self.player)
+                if speedy_boi.hp<= 0:
+                    speedy_boi.kill()
+                    
 
             for enemy in self.enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
                 #if random.random() < self.settings.ENEMY_FLASH_RATE: 
@@ -193,17 +229,21 @@ class Game():
                 if enemy.hp <= 0:
                     enemy.kill()
                     self.enemies_killed+=1
+
             if self.player.HP > 50:
                 self.player.HP = 50
             if self.player.HP <= 0:
                 self.screen.fill("black")
                 self.screen.blit(self.death_surface, (self.settings.screen_WIDTH//2.25,self.settings.screen_HEIGHT//2))
+            
             pygame.display.flip() #updtae the ENTIRE display
             
             if self.enemies_killed >= self.level_threshold: 
                 self.wave_number += 1 
                 self.enemies_spawned = 0 
                 self.enemies_killed = 0
+                self.speedy_bois_spawned = 0
+                self.bigenemies_spawned = 0
                 """for enemy in self.enemies:
                     enemy.kill()"""
                 for big_enemy in self.big_enemies:
@@ -216,7 +256,6 @@ class Game():
                     self.biglevel_threshold = math.floor(self.wave_number // 5)
                 elif self.wave_number > 10: 
                     self.biglevel_threshold = math.floor(self.wave_number // 3) 
-                self.bigenemies_spawned = 0
             self.clock.tick(self.settings.FPS) 
             self.frame_count += 1 
  
