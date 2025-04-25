@@ -167,7 +167,7 @@ class SpeedyBoi(pygame.sprite.Sprite):
         self.speed = self.settings.speedy_boi_SPEED
 
         self.spritesheet = SpriteSheet(r"sprites\machete.png")
-        self.sprites = self.spritesheet.get_images(0,0,48,48,8)
+        self.sprites = self.spritesheet.get_images(0,0,48,48,1)
         self.image = self.sprites[0]
         
         self.rect = self.image.get_rect()
