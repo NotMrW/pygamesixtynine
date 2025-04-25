@@ -8,8 +8,9 @@ class Settings():
         self.FPS = 60 #FPS modulator
 
         #more setting sorting
-        self.player_SPEED = 3 #Damn, speed
+        self.player_SPEED = 3 #Damn, speed equaled 3
         self.big_boi_SPEED = self.player_SPEED/2 #original speed: HALF of player's speed
+        self.speedy_boi_SPEED = self.player_SPEED * 3 #original: TRIPLE the player's speed
         self.KNOCKBACK_AMOUNT = 20
 
         #Just some more sorting to find stats easier, did you expect more?
