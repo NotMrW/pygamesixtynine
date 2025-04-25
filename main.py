@@ -53,7 +53,7 @@ class Game():
         self.speedy_bois_spawned = 0
         self.speedy_bois_killed = 0
 
-        self.wave_number = 7
+        self.wave_number = 1
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -124,7 +124,7 @@ class Game():
             if bullet_enemy_collisions:
                 total_enemies_hit = list(bullet_enemy_collisions.values())[0]
                 for enemy in total_enemies_hit:
-                    enemy.hp -= 2
+                    enemy.hp -= 1
                     enemy.knockback(bullet)
                     if enemy.hp <= 0:
                         enemy.kill()
@@ -244,8 +244,6 @@ class Game():
                 self.enemies_killed = 0
                 self.speedy_bois_spawned = 0
                 self.bigenemies_spawned = 0
-                """for enemy in self.enemies:
-                    enemy.kill()"""
                 for big_enemy in self.big_enemies:
                     big_enemy.kill()
                 if self.wave_number <= 10:
@@ -255,7 +253,9 @@ class Game():
                 if self.wave_number <= 10: 
                     self.biglevel_threshold = math.floor(self.wave_number // 5)
                 elif self.wave_number > 10: 
-                    self.biglevel_threshold = math.floor(self.wave_number // 3) 
+                    self.biglevel_threshold = math.floor(self.wave_number // 3)
+                for medkit in self.medkits:
+                    medkit.kill()
             self.clock.tick(self.settings.FPS) 
             self.frame_count += 1 
  
