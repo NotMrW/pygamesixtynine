@@ -7,10 +7,9 @@ import math
 #import classes from other files
 from settings import Settings
 from player import Player
-from enemy import Enemy
-from enemy import BigEnemy
+from enemy import Enemy, BigEnemy
 from bullet import Bullet
-from item import Medkit
+from item import Medkit, Shield
 
 
 
@@ -36,7 +35,9 @@ class Game():
 
 
         self.player = Player(self) #initialize player
+        
         self.medkits = pygame.sprite.Group()
+        self.shields = pygame.sprite.Group()
 
         self.bullets = pygame.sprite.Group() #stuff the bulltes in one, plural group
         self.enemies = pygame.sprite.Group() #Get the little shits into a plural group
@@ -67,7 +68,7 @@ class Game():
     def run(self): 
         """"Da function to run da gaem"""
         while self.running: #we use "running" value here for loop? Huh, neat
-            print(self.player.HP)
+            print(self.player.HP, self.player.shield)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False #We always need to be able to run from the gaem
@@ -116,15 +117,19 @@ class Game():
             if bullet_enemy_collisions:
                 total_enemies_hit = list(bullet_enemy_collisions.values())[0]
                 for enemy in total_enemies_hit:
-                    enemy.hp -= 1
+                    enemy.hp -= 2
                     enemy.knockback(bullet)
                     if enemy.hp <= 0:
                         enemy.kill()
                         self.enemies_killed+=1
                         self.score+=1
                         self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
-                        if random.random() <= 0.02:
+                        if random.random() <= 0.05:
+                            medkit.rect.topleft = (enemy.x, enemy.y)
                             self.medkits.add(medkit)
+                        if random.random() <= 0.001:
+                            shield.rect.topleft = (enemy.x, enemy.y)
+                            self.shields.add(shield)
                         
             if bullet_bigenemy_collisions: #if bullets collided with Big Bois...
                 total_enemies_hit = list(bullet_bigenemy_collisions.values())[0] #fill a list with big enemy collisions' values
@@ -147,11 +152,16 @@ class Game():
             for medkit in self.medkits:
                 medkit.draw(self)
                 medkit.heal_player(self.player)
+            for shield in self.shields:
+                shield.draw(self)
+                shield.add_shield(self.player)
 
             enemy = Enemy(self) 
             big_enemy = BigEnemy(self)
-            medkit = Medkit(self)
             
+            medkit = Medkit(self)
+            shield = Shield(self)
+
             self.player.update() #update the player, mainly its position, tho
             self.player.blit(self) #draw the player
             

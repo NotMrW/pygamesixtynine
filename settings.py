@@ -24,3 +24,4 @@ class Settings():
 
         #just for items and their attributes
         self.medkit_HEAL = 25
+        self.shield_SHIELD = 10

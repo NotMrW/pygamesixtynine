@@ -39,7 +39,10 @@ class Enemy(pygame.sprite.Sprite):
     def check_collide(self, player):
         if player:
             if self.rect.colliderect(player.rect):
-                player.HP -= 1 #maybe we should add a damage variable?
+                if player.shield > 0:
+                    player.shield -=1
+                else:
+                    player.HP -= 1 #maybe we should add a damage variable?
                 self.hp -= 2
 
     def knockback(self, bullet):
