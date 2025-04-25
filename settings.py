@@ -10,11 +10,11 @@ class Settings():
         #more setting sorting
         self.player_SPEED = 3 #Damn, speed equaled 3
         self.big_boi_SPEED = self.player_SPEED/2 #original speed: HALF of player's speed
-        self.speedy_boi_SPEED = self.player_SPEED * 3 #original: TRIPLE the player's speed
+        self.speedy_boi_SPEED = self.player_SPEED * 2.75 #original: TRIPLE the player's speed
         self.KNOCKBACK_AMOUNT = 20
 
         #Just some more sorting to find stats easier, did you expect more?
-        self.bullet_SPEED = 20 #SPEED
+        self.bullet_SPEED = 25 #SPEED
 
         #even more sorting, is this getting old yet?
         self.ENEMY_FLASH_RATE = .01 #flashy flashy
@@ -25,3 +25,4 @@ class Settings():
 
         #just for items and their attributes
         self.medkit_HEAL = 25
+        self.shield_SHIELD = 10

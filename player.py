@@ -13,6 +13,7 @@ class Player:
         self.x = self.settings.screen_WIDTH / 2 #center horizontally
         self.y = self.settings.screen_HEIGHT / 2 #center vertically
         self.HP = 50
+        self.shield = 0
         self.spritesheet = SpriteSheet("sprites\manWalk.png")
         self.sprites = self.spritesheet.get_images(0,0,32,32,8)
         self.image = self.sprites[0]
