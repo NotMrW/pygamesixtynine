@@ -4,17 +4,18 @@ class Settings():
 
         #sorting settings based on what they're related to
         self.screen_HEIGHT = 800 #screen height
-        self.screen_WIDTH = 1000 #screen width what? Expected something funny?
+        self.screen_WIDTH = 1000 #screen width. What? Expected something funny?
         self.FPS = 60 #FPS modulator
 
-        #more setting sorting
+        #Speed stat sorting
         self.player_SPEED = 3 #Damn, speed equaled 3
         self.big_boi_SPEED = self.player_SPEED/2 #original speed: HALF of player's speed
         self.speedy_boi_SPEED = self.player_SPEED * 2.75 #original: TRIPLE the player's speed
-        self.KNOCKBACK_AMOUNT = 20
+        self.blindBulb_SPEED = self.player_SPEED/3 #started as a third of player's speed
 
         #Just some more sorting to find stats easier, did you expect more?
         self.bullet_SPEED = 25 #SPEED
+        self.KNOCKBACK_AMOUNT = 20
 
         #even more sorting, is this getting old yet?
         self.ENEMY_FLASH_RATE = .01 #flashy flashy
@@ -23,6 +24,6 @@ class Settings():
         #more sorting? Ugh
         self.SCALE_FACTOR = 1 #Scale multiplier
 
-        #just for items and their attributes
+        #Item stats
         self.medkit_HEAL = 25
         self.shield_SHIELD = 10
