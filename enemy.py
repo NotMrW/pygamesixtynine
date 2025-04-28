@@ -322,7 +322,7 @@ class DeathBulb(pygame.sprite.Sprite):
         self.settings = self.game.settings
 
         self.hp = 1
-        self.speed = self.settings.player_SPEED
+        self.speed = self.settings.big_boi_SPEED
 
 
         self.spritesheet = SpriteSheet(r"sprites\DeathBulb.png")
