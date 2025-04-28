@@ -243,10 +243,10 @@ class BlindBulb(pygame.sprite.Sprite):
         self.settings = self.game.settings
 
         self.hp = 3
-        self.speed = self.settings.self.speedy_boi_SPEED
+        self.speed = self.settings.bulb_speed
 
 
-        self.spritesheet = SpriteSheet(r"sprites\LightBulb.gif")
+        self.spritesheet = SpriteSheet(r"sprites\DeathBulb.png")
         self.sprites = self.spritesheet.get_images(0,0,48,48,8)
         self.image = self.sprites[0]
         
@@ -282,7 +282,7 @@ class BlindBulb(pygame.sprite.Sprite):
     def update(self, player):
         """FEAR ITS UPDATE!"""
         if player:  # Ensure player is not None
-            self.target = player.rect.center
+            self.target = (random.randint(1, 1000),random.randint(1,800))
             distance = [
                 self.target[0] - self.x,
                 self.target[1] - self.y
@@ -307,6 +307,3 @@ class BlindBulb(pygame.sprite.Sprite):
 
     def __del__(self):
         self.count -= 1 
-
-    def blind(self, game):
-        game.screen.fill("white")

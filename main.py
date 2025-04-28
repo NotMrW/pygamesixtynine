@@ -7,7 +7,7 @@ import math
 #import classes from other files
 from settings import Settings
 from player import Player
-from enemy import Enemy, BigEnemy, SpeedyBoi
+from enemy import Enemy, BigEnemy, SpeedyBoi, BlindBulb
 from bullet import Bullet
 from item import Medkit, Shield
 
@@ -44,21 +44,24 @@ class Game():
         self.enemies = pygame.sprite.Group() #Get the little shits into a plural group
         self.big_enemies = pygame.sprite.Group()
         self.speedy_bois = pygame.sprite.Group()
+        self.blind_bulbs = pygame.sprite.Group()
 
-        self.bigenemies_spawned = 0
+
 
         self.enemies_spawned = 0
         self.enemies_killed = 0
 
+        self.bigenemies_spawned = 0
+
         self.speedy_bois_spawned = 0
         self.speedy_bois_killed = 0
 
-        self.wave_number = 1
+        self.wave_number = 7
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
         self.biglevel_threshold = math.floor(self.wave_number // 5)
-        self.speedylevel_threshold = 0+math.floor(self.wave_number//7)
+        self.speedylevel_threshold = math.floor(self.wave_number//7)
 
         self.score = 0
         pygame.font.init()
@@ -181,7 +184,8 @@ class Game():
             enemy = Enemy(self) 
             big_enemy = BigEnemy(self)
             speedy_boi = SpeedyBoi(self)
-            
+            blind_bulb = BlindBulb(self)
+
             medkit = Medkit(self)
             shield = Shield(self)
 
@@ -227,6 +231,15 @@ class Game():
                 if enemy.hp <= 0:
                     enemy.kill()
                     self.enemies_killed+=1
+            for blinb_bulb in self.blind_bulbs:
+                blind_bulb.draw(self)
+                blind_bulb.update(self.player)
+                blind_bulb.check_collide(self.player)
+                if blinb_bulb.hp <= 0:
+                    blind_bulb.kill()
+                    game.screen.fill("white")
+                    pygame.display.flip()
+                    pygame.time.wait(5)
 
             if self.player.HP > 50:
                 self.player.HP = 50

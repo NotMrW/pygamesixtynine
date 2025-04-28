@@ -11,6 +11,7 @@ class Settings():
         self.player_SPEED = 3 #Damn, speed equaled 3
         self.big_boi_SPEED = self.player_SPEED/2 #original speed: HALF of player's speed
         self.speedy_boi_SPEED = self.player_SPEED * 2.75 #original: TRIPLE the player's speed
+        self.bulb_speed = 3
         self.KNOCKBACK_AMOUNT = 20
 
         #Just some more sorting to find stats easier, did you expect more?
