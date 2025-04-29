@@ -121,6 +121,7 @@ class Game():
             bullet_enemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False) #Bullet/Little_shit collisions
             bullet_bigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, False)
             bullet_speedy_collisions = pygame.sprite.groupcollide(self.bullets, self.speedy_bois, True, False)
+            bullet_bulb_collisions = pygame.sprite.groupcollide(self.bullets, self.blind_bulbs, True, False) 
 
             if bullet_enemy_collisions:
                 total_enemies_hit = list(bullet_enemy_collisions.values())[0]
@@ -165,6 +166,18 @@ class Game():
                         bigenemy.kill() #ded
                         self.score+=3 #one point!
                         self.score_surface = self.font.render(str(self.score), True, (255, 255, 255)) 
+
+            if bullet_bulb_collisions:
+                total_enemies_hit = list(bullet_bulb_collisions.values())[0]
+                for blind_bulb in total_enemies_hit:
+                    blind_bulb.hp -= 1
+                    blind_bulb.knockback(bullet)
+                    if blind_bulb.hp <= 0:
+                        blind_bulb.kill()
+                        game.screen.fill("white")
+                        pygame.display.flip()
+                        pygame.time.wait(5)
+
 
             for bullet in self.bullets: #check dem bullets
                 if bullet.rect.left > self.settings.screen_WIDTH or bullet.rect.right < 0: #kill the bullets if they go off-screen
@@ -215,6 +228,9 @@ class Game():
                 self.speedy_bois.add(speedy_boi)
                 self.speedy_bois_spawned +=1
 
+            if random.random() < 1.01 and len(self.blind_bulbs)<1:
+                self.blind_bulbs.add(blind_bulb)
+
             for speedy_boi in self.speedy_bois:
                 speedy_boi.draw(self)
                 speedy_boi.update(self.player)
@@ -231,6 +247,7 @@ class Game():
                 if enemy.hp <= 0:
                     enemy.kill()
                     self.enemies_killed+=1
+
             for blinb_bulb in self.blind_bulbs:
                 blind_bulb.draw(self)
                 blind_bulb.update(self.player)
@@ -238,8 +255,8 @@ class Game():
                 if blinb_bulb.hp <= 0:
                     blind_bulb.kill()
                     game.screen.fill("white")
+                    pygame.time.wait(10)
                     pygame.display.flip()
-                    pygame.time.wait(5)
 
             if self.player.HP > 50:
                 self.player.HP = 50

@@ -5,13 +5,13 @@ class Settings():
         #sorting settings based on what they're related to
         self.screen_HEIGHT = 800 #screen height
         self.screen_WIDTH = 1000 #screen width what? Expected something funny?
-        self.FPS = 60 #FPS modulator
+        self.FPS = 10 #FPS modulator
 
         #more setting sorting
         self.player_SPEED = 3 #Damn, speed equaled 3
         self.big_boi_SPEED = self.player_SPEED/2 #original speed: HALF of player's speed
         self.speedy_boi_SPEED = self.player_SPEED * 2.75 #original: TRIPLE the player's speed
-        self.bulb_speed = 3
+        self.bulb_speed = 1
         self.KNOCKBACK_AMOUNT = 20
 
         #Just some more sorting to find stats easier, did you expect more?

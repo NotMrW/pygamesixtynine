@@ -247,7 +247,7 @@ class BlindBulb(pygame.sprite.Sprite):
 
 
         self.spritesheet = SpriteSheet(r"sprites\DeathBulb.png")
-        self.sprites = self.spritesheet.get_images(0,0,48,48,8)
+        self.sprites = self.spritesheet.get_images(0,0,32,32,8)
         self.image = self.sprites[0]
         
         self.rect = self.image.get_rect()
