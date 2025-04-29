@@ -21,6 +21,8 @@ class Player:
         self.rect = self.image.get_rect()
         self.rect.center = game.rect.center
         
+        self.status = "none"
+        
 
         #We have to initialize the directions
         self.moving_up = False

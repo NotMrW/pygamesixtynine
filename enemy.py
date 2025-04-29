@@ -8,7 +8,7 @@ from spritesheet import SpriteSheet
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, game):
-        """Initialize da Enemies"""
+        """Basic Bois"""
         super().__init__()
         self.game = game
         self.settings = game.settings
@@ -80,7 +80,7 @@ class Enemy(pygame.sprite.Sprite):
 class BigEnemy(pygame.sprite.Sprite):
     count = 0
     def __init__(self, game):
-        """Initialize da Fucker"""
+        """BEEG BOI"""
         super().__init__()
         self.game = game
         self.settings = self.game.settings
@@ -158,7 +158,7 @@ class BigEnemy(pygame.sprite.Sprite):
 class SpeedyBoi(pygame.sprite.Sprite):
     count = 0
     def __init__(self, game):
-        """Initialize da Fucker"""
+        """Speedy Boi"""
         super().__init__()
         self.game = game
         self.settings = self.game.settings
@@ -237,7 +237,7 @@ class SpeedyBoi(pygame.sprite.Sprite):
 class BlindBulb(pygame.sprite.Sprite):
     count = 0
     def __init__(self, game):
-        """Run"""
+        """Run?"""
         super().__init__()
         self.game = game
         self.settings = self.game.settings
@@ -247,7 +247,7 @@ class BlindBulb(pygame.sprite.Sprite):
 
 
         self.spritesheet = SpriteSheet(r"sprites\BlindBulb.png")
-        self.sprites = self.spritesheet.get_images(0,0,48,48,8)
+        self.sprites = self.spritesheet.get_images(0,0,32,32,8)
         self.image = self.sprites[0]
         
         self.rect = self.image.get_rect()
@@ -307,9 +307,6 @@ class BlindBulb(pygame.sprite.Sprite):
 
     def __del__(self):
         self.count -= 1 
-
-    def blind(self, game):
-        game.screen.fill("white")
 
 
 
@@ -326,7 +323,7 @@ class DeathBulb(pygame.sprite.Sprite):
 
 
         self.spritesheet = SpriteSheet(r"sprites\DeathBulb.png")
-        self.sprites = self.spritesheet.get_images(0,0,48,48,8)
+        self.sprites = self.spritesheet.get_images(0,0,32,32,8)
         self.image = self.sprites[0]
         
         self.rect = self.image.get_rect()
@@ -386,6 +383,3 @@ class DeathBulb(pygame.sprite.Sprite):
 
     def __del__(self):
         self.count -= 1 
-
-    def blind(self, game):
-        game.screen.fill("white")

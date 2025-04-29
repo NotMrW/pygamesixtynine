@@ -7,7 +7,7 @@ import math
 #import classes from other files
 from settings import Settings
 from player import Player
-from enemy import Enemy, BigEnemy, SpeedyBoi
+from enemy import Enemy, BigEnemy, SpeedyBoi, BlindBulb, DeathBulb
 from bullet import Bullet
 from item import Medkit, Shield
 
@@ -44,8 +44,12 @@ class Game():
         self.enemies = pygame.sprite.Group() #Get the little shits into a plural group
         self.big_enemies = pygame.sprite.Group()
         self.speedy_bois = pygame.sprite.Group()
+        self.blind_bulbs = pygame.sprite.Group()
+        self.death_bulbs = pygame.sprite.Group()
 
         self.bigenemies_spawned = 0
+
+        self.bulbs_spawned = 0
 
         self.enemies_spawned = 0
         self.enemies_killed = 0
@@ -53,7 +57,7 @@ class Game():
         self.speedy_bois_spawned = 0
         self.speedy_bois_killed = 0
 
-        self.wave_number = 1
+        self.wave_number = 5
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -72,7 +76,7 @@ class Game():
     def run(self): 
         """"Da function to run da gaem"""
         while self.running: #we use "running" value here for loop? Huh, neat
-            print(self.player.HP, self.player.shield)
+            print(self.bulbs_spawned)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False #We always need to be able to run from the gaem
@@ -118,6 +122,8 @@ class Game():
             bullet_enemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False) #Bullet/Little_shit collisions
             bullet_bigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, False)
             bullet_speedy_collisions = pygame.sprite.groupcollide(self.bullets, self.speedy_bois, True, False)
+            bullet_blindBulb_collisions = pygame.sprite.groupcollide(self.bullets, self.blind_bulbs, True, True)
+            bullet_deathBulb_collisions = pygame.sprite.groupcollide(self.bullets, self.death_bulbs, True, True)
 
             if bullet_enemy_collisions:
                 total_enemies_hit = list(bullet_enemy_collisions.values())[0]
@@ -181,6 +187,8 @@ class Game():
             enemy = Enemy(self) 
             big_enemy = BigEnemy(self)
             speedy_boi = SpeedyBoi(self)
+            blind_bulb = BlindBulb(self)
+            death_bulb = DeathBulb(self)
             
             medkit = Medkit(self)
             shield = Shield(self)
@@ -190,18 +198,14 @@ class Game():
             
             if self.enemies_spawned > 0.3*self.level_threshold:
                 self.settings.spawnrate = 1
+
             if (self.enemies_spawned - self.enemies_killed) < 0.3*self.level_threshold:
                 self.settings.spawnrate = 0.8
 
             if len(self.big_enemies) < self.biglevel_threshold and self.bigenemies_spawned < self.biglevel_threshold: #if the length of them big bois is higher than the threshold for em...
-                self.big_enemies.add(BigEnemy(self)) #add them to the list
+                self.big_enemies.add(big_enemy) #add them to the list
                 self.bigenemies_spawned += 1 #increment the spawn counter
-            for big_enemy in self.big_enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
-                big_enemy.draw(self) #Spawn the little twits
-                big_enemy.update(self.player) #update those little shits
-                big_enemy.check_collide(self.player)
-                if big_enemy.hp <= 0:
-                    big_enemy.kill()
+
 
             if random.random() >self.settings.spawnrate and self.enemies_spawned < self.level_threshold: #if the Gambler is lucky...
                 self.enemies.add(enemy) #add the cannon fodder
@@ -211,14 +215,43 @@ class Game():
                 self.speedy_bois.add(speedy_boi)
                 self.speedy_bois_spawned +=1
 
+            if random.random() < 0.01 and self.bulbs_spawned < 1:
+                if random.random() < 0.001:
+                    self.death_bulbs.add(death_bulb)
+                    self.bulbs_spawned += 1
+                else:
+                    self.blind_bulbs.add(blind_bulb)
+                    self.bulbs_spawned += 1
+
+
+            for big_enemy in self.big_enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
+                big_enemy.draw(self) #Spawn the little twits
+                big_enemy.update(self.player) #update those little shits
+                big_enemy.check_collide(self.player)
+                if big_enemy.hp <= 0:
+                    big_enemy.kill()
+
             for speedy_boi in self.speedy_bois:
                 speedy_boi.draw(self)
                 speedy_boi.update(self.player)
                 speedy_boi.check_collide(self.player)
                 if speedy_boi.hp<= 0:
                     speedy_boi.kill()
+                
+            for bulb in self.blind_bulbs:
+                blind_bulb.draw(self)
+                blind_bulb.update(self.player)
+                blind_bulb.check_collide(self.player)
+                if blind_bulb.hp <= 0:
+                    blind_bulb.kill()
+                
+            for bulb in self.death_bulbs:
+                death_bulb.draw(self)
+                death_bulb.update(self.player)
+                death_bulb.check_collide(self.player)
+                if death_bulb.hp <= 0:
+                    death_bulb.kill()
                     
-
             for enemy in self.enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
                 #if random.random() < self.settings.ENEMY_FLASH_RATE: 
                 enemy.draw(self)
@@ -242,8 +275,13 @@ class Game():
                 self.enemies_killed = 0
                 self.speedy_bois_spawned = 0
                 self.bigenemies_spawned = 0
+                self.bulbs_spawned = 0
                 for big_enemy in self.big_enemies:
                     big_enemy.kill()
+                for bulb in self.blind_bulbs:
+                    blind_bulb.kill()
+                for bulb in self.death_bulbs:
+                    death_bulb.kill()
                 if self.wave_number <= 10:
                     self.level_threshold = 5 + 5*self.wave_number 
                 elif self.wave_number > 10: 
