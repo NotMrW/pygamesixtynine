@@ -30,7 +30,7 @@ class Player:
         self.moving_right = False
         self.moving_left = False
 
-
+        self.firing = False
 
         #frames
         self.frame = 0
