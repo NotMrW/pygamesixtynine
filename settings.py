@@ -11,7 +11,7 @@ class Settings():
         self.player_SPEED = 3 #Damn, speed equaled 3
         self.big_boi_SPEED = self.player_SPEED/2 #original speed: HALF of player's speed
         self.speedy_boi_SPEED = self.player_SPEED * 2.75 #original: TRIPLE the player's speed
-        self.blindBulb_SPEED = 0 #started as a third of player's speed
+        self.blindBulb_SPEED = 1 #started as a third of player's speed
 
         #Just some more sorting to find stats easier, did you expect more?
         self.bullet_SPEED = 25 #SPEED

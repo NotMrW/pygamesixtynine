@@ -269,7 +269,6 @@ class BlindBulb(pygame.sprite.Sprite):
 
         self.frame = 0
         self.count += 1 
-        print("Spawned") #sh
     
     def check_collide(self, player):
         if player:
