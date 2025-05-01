@@ -1,3 +1,25 @@
 New weaponry
 
 Think of new Items and how they will work
+
+
+
+
+----------CONCEPTS---------
+Enemy concept: Bloater;
+    Counts as SPECIAL enemy (until further notice and vote)
+
+    slower than Big Enemy
+
+    5 HP
+
+    Will spawn more enemies upon dying on shot
+
+Enemy Concept: Crawler;
+    Counts as a SPECIAL enemy (until further notice and vote)
+
+    Can spawn naturally or from another Enemy
+
+    1 HP
+
+    As fast as the Player (or as fast as Big Enemy if it's too difficult)

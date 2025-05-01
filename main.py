@@ -113,17 +113,17 @@ class Game():
             if self.player.status == "blind":
                 game.screen.fill("white")
                 pygame.display.flip()
-                endblindtimer = pygame.time.get_ticks
+                endblindtimer = pygame.time.get_ticks()
+                print(blindtimer, endblindtimer)
                 if endblindtimer >= blindtimer:
                     self.player.status = "none"
-
-
-            bg_image = pygame.image.load('sprites\grasstile.png')
-            bg_image = pygame.transform.scale(bg_image, (self.settings.screen_WIDTH, self.settings.screen_HEIGHT))
-            game.screen.blit(bg_image, (0, 0))
-            game.screen.blit(self.score_surface, (50,100))
-            self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255))
-            game.screen.blit(self.wave_surface, (50, 50))
+            else: #THIS STILL WORKS, ACE!
+                bg_image = pygame.image.load('sprites\grasstile.png')
+                bg_image = pygame.transform.scale(bg_image, (self.settings.screen_WIDTH, self.settings.screen_HEIGHT))
+                game.screen.blit(bg_image, (0, 0))
+                game.screen.blit(self.score_surface, (50,100))
+                self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255))
+                game.screen.blit(self.wave_surface, (50, 50))
 
             bullet_enemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False) #Bullet/Little_shit collisions
             bullet_bigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, False)
@@ -183,7 +183,7 @@ class Game():
                     if blind_bulb.hp <= 0:
                         self.player.status = "blind"
                         blind_bulb.kill()
-                        blindtimer = pygame.time.get_ticks
+                        blindtimer = pygame.time.get_ticks() + 5000
                         
                         
 

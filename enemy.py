@@ -13,6 +13,7 @@ class Enemy(pygame.sprite.Sprite):
         self.game = game
         self.settings = game.settings
         self.hp = 2
+        self.type = "normal"
         spawn = random.choice(['top', 'bottom', 'left', 'right'])
         if spawn == 'top':
             self.x = random.randint(0, self.settings.screen_WIDTH)
@@ -84,8 +85,8 @@ class BigEnemy(pygame.sprite.Sprite):
         super().__init__()
         self.game = game
         self.settings = self.game.settings
-
         self.hp = 3
+        self.type = "special"
         self.speed = self.settings.big_boi_SPEED
 
 
@@ -164,6 +165,7 @@ class SpeedyBoi(pygame.sprite.Sprite):
         self.settings = self.game.settings
 
         self.hp = 1
+        self.type = "special"
         self.speed = self.settings.speedy_boi_SPEED
 
         self.spritesheet = SpriteSheet(r"sprites\machete.png")
@@ -243,6 +245,7 @@ class BlindBulb(pygame.sprite.Sprite):
         self.settings = self.game.settings
 
         self.hp = 3
+        self.type = "special"
         self.speed = self.settings.blindBulb_SPEED
 
 
@@ -319,6 +322,7 @@ class DeathBulb(pygame.sprite.Sprite):
         self.settings = self.game.settings
 
         self.hp = 1
+        self.type = "special"
         self.speed = self.settings.big_boi_SPEED
 
 
