@@ -303,7 +303,11 @@ class Game():
                 self.speedy_bois.add(speedy_boi)
                 self.speedy_bois_spawned +=1
 
-            if random.random() < 1.21 and self.bulbs_spawned < 1:
+            if random.random() < 0.001 and self.bulbs_spawned < 1:
+                if random.random() < 0.00001:
+                    self.death_bulbs.add(death_bulb)
+                    self.bulbs_spawned += 1
+                else:
                     self.blind_bulbs.add(blind_bulb)
                     self.bulbs_spawned += 1
 
@@ -353,7 +357,10 @@ class Game():
             if self.player.HP > 50:
                 self.player.HP = 50 #prevent overheal
             if self.player.HP <= 0:
-                self.screen.fill("black")
+                if self.player.status == "permablind":
+                    self.screen.fill("white")
+                else:
+                    self.screen.fill("black")
                 self.screen.blit(self.death_surface, (self.settings.screen_WIDTH//2.25,self.settings.screen_HEIGHT//2))
             
 
@@ -362,7 +369,7 @@ class Game():
             if self.player.status != "blind":
                 pygame.display.flip() #update the ENTIRE display
             if self.player.status == "permablind":
-                self.screen.fill("white")
+                self.player.HP = 0
                 self.screen.blit(self.death_surface, (self.settings.screen_WIDTH//2.25,self.settings.screen_HEIGHT//2))
             
 
