@@ -16,8 +16,8 @@ class Medkit(pygame.sprite.Sprite):
         self.y = 500
         self.HEAL = self.settings.medkit_HEAL
 
-        self.spritesheet = SpriteSheet(r"sprites/radioBig.png")
-        self.sprites = self.spritesheet.get_images(0,0,32,32,1)
+        self.spritesheet = SpriteSheet(r"sprites/medkit.png")
+        self.sprites = self.spritesheet.get_images(0,0,16,16,1)
         self.image = self.sprites[0]
         
         self.rect = self.image.get_rect()
@@ -39,8 +39,8 @@ class Shield(pygame.sprite.Sprite):
         self.settings = game.settings
         self.SHIELD = self.settings.shield_SHIELD
 
-        self.spritesheet = SpriteSheet(r"sprites/manFace.png")
-        self.sprites = self.spritesheet.get_images(0,0,32,32,1)
+        self.spritesheet = SpriteSheet(r"sprites/shieldbatt.png")
+        self.sprites = self.spritesheet.get_images(0,0,16,16,1)
         self.image = self.sprites[0]
         
         self.rect = self.image.get_rect()
