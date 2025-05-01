@@ -4,6 +4,8 @@ import pygame
 from pygame import mixer
 import math
 
+
+
 #import classes from other files
 from settings import Settings
 from player import Player
@@ -13,20 +15,28 @@ from item import Medkit, Shield
 
 
 
+#Define the Game as a CLASS
 class Game():
     frame_count = 0
     def __init__(self):
         """Initialize da Gaem"""
+
+
+
+        #mixer code
         mixer.init()
         mixer.music.load("Audio\The _Beginning nor End_..mp3")
         mixer.music.set_volume(0.7)
         mixer.music.play()
+
+
+
+        #Main Setup
         self.settings = Settings() #initialize settings
         self.clock = pygame.time.Clock() #get a clock going
         self.screen = pygame.display.set_mode((self.settings.screen_WIDTH, self.settings.screen_HEIGHT)) #set the screen up
         self.rect = self.screen.get_rect() #get that rect
         pygame.display.set_caption("SpriteGame") #name game window
-        
         self.score = 0
         pygame.font.init()
         self.font = pygame.font.Font(None, 36) #get a font for the score
@@ -34,29 +44,43 @@ class Game():
         self.death_surface = self.font.render("YOU DIED", True, (255, 255, 255))
 
 
-        self.player = Player(self) #initialize player
+
+        #Setup the Player
+        self.player = Player(self)
         
+
+
+        #Setup the items
         self.medkits = pygame.sprite.Group()
         self.shields = pygame.sprite.Group()
 
-        self.bullets = pygame.sprite.Group() #stuff the bullets in one, plural group
 
-        self.enemies = pygame.sprite.Group() #Get the little shits into a plural group
+
+        #Setup the sexy bullets
+        self.bullets = pygame.sprite.Group()
+
+
+
+        #Setup every enemy type
+        self.enemies = pygame.sprite.Group()
         self.big_enemies = pygame.sprite.Group()
         self.speedy_bois = pygame.sprite.Group()
         self.blind_bulbs = pygame.sprite.Group()
         self.death_bulbs = pygame.sprite.Group()
 
+
+
+        #Enemy-Specific Data Setup
         self.bigenemies_spawned = 0
-
         self.bulbs_spawned = 0
-
         self.enemies_spawned = 0
         self.enemies_killed = 0
-
         self.speedy_bois_spawned = 0
         self.speedy_bois_killed = 0
 
+
+
+        #Wave Setup
         self.wave_number = 5
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
@@ -64,11 +88,9 @@ class Game():
         self.biglevel_threshold = math.floor(self.wave_number // 5)
         self.speedylevel_threshold = 0+math.floor(self.wave_number//7)
 
-        self.score = 0
-        pygame.font.init()
-        self.font = pygame.font.Font(None, 36) #get a font for the score
-        self.score_surface = self.font.render(str(self.score), True, (255, 255, 255)) #render the score as a surface
 
+
+        #Setup Booleans
         self.running = True #I guess we can have a loop for the gaem...dwa
 
 
@@ -76,7 +98,15 @@ class Game():
     def run(self): 
         """"Da function to run da gaem"""
         while self.running: #we use "running" value here for loop? Huh, neat
+
+
+            
+            #DEBUGGING
             print(self.player.status)
+
+
+
+            #Keayboard-Based Events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False #We always need to be able to run from the gaem
@@ -95,6 +125,9 @@ class Game():
                         bullet = Bullet(self)
                         self.bullets.add(bullet)
 
+
+
+                #More Keayboard-Based events
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_a or event.key == pygame.K_LEFT:
                         self.player.moving_left = False
@@ -105,11 +138,17 @@ class Game():
                     if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                         self.player.moving_down = False
                 
+
+
+                # *Le Gasp* Mouse-Based Events?!
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == pygame.BUTTON_LEFT:
                         bullet = Bullet(self)
                         self.bullets.add(bullet)
             
+
+
+            #Player Status handlers
             if self.player.status == "blind":
                 game.screen.fill("white")
                 pygame.display.flip()
@@ -125,12 +164,18 @@ class Game():
                 self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255))
                 game.screen.blit(self.wave_surface, (50, 50))
 
+
+
+            #Individual Bullet/Enemy Collision Setup
             bullet_enemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False) #Bullet/Little_shit collisions
             bullet_bigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, False)
             bullet_speedy_collisions = pygame.sprite.groupcollide(self.bullets, self.speedy_bois, True, False)
             bullet_blindbulb_collisions = pygame.sprite.groupcollide(self.bullets, self.blind_bulbs, True, False)
             bullet_deathbulb_collisions = pygame.sprite.groupcollide(self.bullets, self.death_bulbs, True, False)
 
+
+
+            #Individual Bullet/Enemy Collision Setup
             if bullet_enemy_collisions:
                 total_enemies_hit = list(bullet_enemy_collisions.values())[0]
                 for enemy in total_enemies_hit:
@@ -178,15 +223,24 @@ class Game():
             if bullet_blindbulb_collisions:
                 total_enemies_hit = list(bullet_blindbulb_collisions.values())[0]
                 for blind_bulb in total_enemies_hit:
-                    blind_bulb.hp -= 3
+                    blind_bulb.hp -= 1
                     blind_bulb.knockback(bullet)
                     if blind_bulb.hp <= 0:
                         self.player.status = "blind"
                         blind_bulb.kill()
                         blindtimer = pygame.time.get_ticks() + 5000
                         
+            if bullet_deathbulb_collisions:
+                total_enemies_hit = list(bullet_deathbulb_collisions.values())[0]
+                for death_bulb in total_enemies_hit:
+                    death_bulb.hp -= 1
+                    self.player.status = "permablind"
+                    self.death_surface = self.font.render("YOU ARE PERMANENTLY BLIND: U R DED", True, (0, 0, 0))
+                    death_bulb.kill()
                         
 
+
+            #Bullet/Edge-Edge-of-Screen behaviors
             for bullet in self.bullets: #check dem bullets
                 if bullet.rect.left > self.settings.screen_WIDTH or bullet.rect.right < 0: #kill the bullets if they go off-screen
                     bullet.kill() #KILL
@@ -195,6 +249,9 @@ class Game():
                 bullet.draw(self) #Draw moar bullet
                 bullet.update() #Updates them there bullets
             
+
+
+            #Item Behavior Handlers
             for medkit in self.medkits:
                 medkit.draw(self)
                 medkit.heal_player(self.player)
@@ -202,28 +259,41 @@ class Game():
                 shield.draw(self)
                 shield.add_shield(self.player)
 
+
+
+            #INDIVIDUAL Enemy Setup
             enemy = Enemy(self) 
             big_enemy = BigEnemy(self)
             speedy_boi = SpeedyBoi(self)
             blind_bulb = BlindBulb(self)
             death_bulb = DeathBulb(self)
             
+
+
+            #INDIVIDUAL Item Setup
             medkit = Medkit(self)
             shield = Shield(self)
 
+
+            #Player-related existence On-Screen
             self.player.update() #update the player, mainly its position, tho
             self.player.blit(self) #draw the player
             
+
+
+            #Wave Threshold Handlers
             if self.enemies_spawned > 0.3*self.level_threshold:
                 self.settings.spawnrate = 1
 
             if (self.enemies_spawned - self.enemies_killed) < 0.3*self.level_threshold:
                 self.settings.spawnrate = 0.8
 
+
+
+            #Enemy Spawn Handlers
             if len(self.big_enemies) < self.biglevel_threshold and self.bigenemies_spawned < self.biglevel_threshold: #if the length of them big bois is higher than the threshold for em...
                 self.big_enemies.add(big_enemy) #add them to the list
                 self.bigenemies_spawned += 1 #increment the spawn counter
-
 
             if random.random() >self.settings.spawnrate and self.enemies_spawned < self.level_threshold: #if the Gambler is lucky...
                 self.enemies.add(enemy) #add the cannon fodder
@@ -237,12 +307,15 @@ class Game():
                     self.blind_bulbs.add(blind_bulb)
                     self.bulbs_spawned += 1
 
-            for big_enemy in self.big_enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
-                big_enemy.draw(self) #Spawn the little twits
-                big_enemy.update(self.player) #update those little shits
+
+
+            #Enemy Drawing Handlers
+            for big_enemy in self.big_enemies: #Gotta check ALL of them big bois
+                big_enemy.draw(self) #Spawn the large lads
+                big_enemy.update(self.player) #update them
                 big_enemy.check_collide(self.player)
                 if big_enemy.hp <= 0:
-                    big_enemy.kill()
+                    big_enemy.kill() #if no HP, then DIE... DUH!
 
             for speedy_boi in self.speedy_bois:
                 speedy_boi.draw(self)
@@ -274,15 +347,27 @@ class Game():
                     enemy.kill()
                     self.enemies_killed+=1
 
+
+
+            #Player HP Handlers
             if self.player.HP > 50:
-                self.player.HP = 50
+                self.player.HP = 50 #prevent overheal
             if self.player.HP <= 0:
                 self.screen.fill("black")
                 self.screen.blit(self.death_surface, (self.settings.screen_WIDTH//2.25,self.settings.screen_HEIGHT//2))
             
+
+
+            #Player Status Handlers
             if self.player.status != "blind":
-                pygame.display.flip() #updtae the ENTIRE display
+                pygame.display.flip() #update the ENTIRE display
+            if self.player.status == "permablind":
+                self.screen.fill("white")
+                self.screen.blit(self.death_surface, (self.settings.screen_WIDTH//2.25,self.settings.screen_HEIGHT//2))
             
+
+
+            #Wave-Related code
             if self.enemies_killed >= self.level_threshold: 
                 self.wave_number += 1 
                 self.enemies_spawned = 0 
@@ -310,5 +395,7 @@ class Game():
             self.frame_count += 1 
  
 
+
+#RUN THAT SHIT!
 game = Game() 
 game.run()
