@@ -102,7 +102,7 @@ class Game():
 
             
             #DEBUGGING
-            print(self.player.status)
+            #print(self.player.status, self.player.HP, self.player.shield)
 
 
 
@@ -235,7 +235,6 @@ class Game():
                 for death_bulb in total_enemies_hit:
                     death_bulb.hp -= 1
                     self.player.status = "permablind"
-                    self.death_surface = self.font.render("YOU ARE PERMANENTLY BLIND: U R DED", True, (0, 0, 0))
                     death_bulb.kill()
                         
 
@@ -303,8 +302,8 @@ class Game():
                 self.speedy_bois.add(speedy_boi)
                 self.speedy_bois_spawned +=1
 
-            if random.random() < 0.001 and self.bulbs_spawned < 1:
-                if random.random() < 0.00001:
+            if random.random() < 1.001 and self.bulbs_spawned < 1:
+                if random.random() < .00001:
                     self.death_bulbs.add(death_bulb)
                     self.bulbs_spawned += 1
                 else:
@@ -333,6 +332,8 @@ class Game():
                 blind_bulb.update(self.player)
                 blind_bulb.check_collide(self.player)
                 if blind_bulb.hp <= 0:
+                    self.player.status = "blind"
+                    blindtimer = pygame.time.get_ticks() + 5000
                     blind_bulb.kill()
                 
             for death_bulb in self.death_bulbs:
@@ -340,6 +341,8 @@ class Game():
                 death_bulb.update(self.player)
                 death_bulb.check_collide(self.player)
                 if death_bulb.hp <= 0:
+                    self.player.status = "permablind"
+                    self.player.HP = 0
                     death_bulb.kill()
                     
             for enemy in self.enemies: #Gotta check the WHOLE DAMN LIST OF ENEMIES
@@ -358,6 +361,7 @@ class Game():
                 self.player.HP = 50 #prevent overheal
             if self.player.HP <= 0:
                 if self.player.status == "permablind":
+                    self.death_surface = self.font.render("YOU ARE PERMANENTLY BLIND: U R DED", True, (0, 0, 0))
                     self.screen.fill("white")
                 else:
                     self.screen.fill("black")

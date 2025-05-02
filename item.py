@@ -1,10 +1,15 @@
-
 #import files
 from spritesheet import SpriteSheet
 from settings import Settings
 
+
+
+
 #import modules
 import pygame
+
+
+
 
 class Medkit(pygame.sprite.Sprite):
     def __init__(self, game):
@@ -32,6 +37,10 @@ class Medkit(pygame.sprite.Sprite):
                 self.kill()
     def draw(self, game):
         game.screen.blit(self.image, self.rect.topleft)
+
+
+
+
 class Shield(pygame.sprite.Sprite):
     def __init__(self, game):
         """Extra Health"""

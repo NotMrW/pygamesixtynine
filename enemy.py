@@ -327,12 +327,13 @@ class DeathBulb(pygame.sprite.Sprite):
 
 
         self.spritesheet = SpriteSheet(r"sprites\DeathBulb.png")
-        self.sprites = self.spritesheet.get_images(0,0,32,32,8)
+        self.sprites = self.spritesheet.get_images(0,0,32,32,12)
         self.image = self.sprites[0]
         
         self.rect = self.image.get_rect()
         self.rect.center = (-1000,-1000)
         spawn = random.choice(['top', 'bottom', 'left', 'right'])
+        self.cycle = 0 
         if spawn == 'top':
             self.x = random.randint(0, self.settings.screen_WIDTH)
             self.y = 0
@@ -353,7 +354,7 @@ class DeathBulb(pygame.sprite.Sprite):
     def check_collide(self, player):
         if player:
             if self.rect.colliderect(player.rect):
-                self.hp -= 3
+                self.hp -= 1
 
     def knockback (self, bullet):
         self.x+= bullet.direction[0]*self.settings.KNOCKBACK_AMOUNT
@@ -378,7 +379,7 @@ class DeathBulb(pygame.sprite.Sprite):
             self.rect.topleft = (self.x, self.y)
 
         if self.game.frame_count % 15 == 0:
-            self.frame = (self.frame+1)% len(self.sprites)
+            self.frame = (self.frame)% len(self.sprites)
         self.image = self.sprites[self.frame]
 
     def draw(self, game):

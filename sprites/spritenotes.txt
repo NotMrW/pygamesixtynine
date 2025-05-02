@@ -1,10 +1,12 @@
 slash is 15x15px
 medkit and shieldbatt is 16x16
-radiobig and machete is 48x48px
+"radiobig and machete is 48x48px
 everything else is 32x32px im pretty sure
-otherwise idk figure it out programmer nerds
+otherwise idk figure it out programmer nerds"
+    -gavin
 
-how bout no?
+"how bout no?"
+    -Braiden (probabyl)
 
 "Do it anyway"
     -Gabriel
