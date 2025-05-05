@@ -300,7 +300,7 @@ class Game():
                 self.big_enemies.add(big_enemy) #add them to the list
                 self.bigenemies_spawned += 1 #increment the spawn counter
             
-            if random.random() >self.settings.spawnrate and self.enemies_spawned < 1   : #if the Gambler is lucky...
+            if random.random() >self.settings.spawnrate and self.enemies_spawned < self.level_threshold: #if the Gambler is lucky...
                 self.enemies.add(enemy) #add the cannon fodder
                 self.enemies_spawned += 1 #add to the valuse of enemies spawned [DEBUGGING]
             
