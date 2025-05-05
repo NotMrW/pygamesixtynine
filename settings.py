@@ -5,7 +5,7 @@ class Settings():
         #sorting settings based on what they're related to
         self.screen_HEIGHT = 800 #screen height
         self.screen_WIDTH = 1000 #screen width. What? Expected something funny?
-        self.FPS = 60 #FPS modulator
+        self.FPS = 40 #FPS modulator
 
         #Speed stat sorting
         self.player_SPEED = 3 #Damn, speed equaled 3

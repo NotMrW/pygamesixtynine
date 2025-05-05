@@ -291,7 +291,7 @@ class Game():
 
 
             #Enemy Spawn Handlers
-            if len(self.big_enemies) < self.biglevel_threshold and self.bigenemies_spawned < self.biglevel_threshold: #if the length of them big bois is higher than the threshold for em...
+            """if len(self.big_enemies) < self.biglevel_threshold and self.bigenemies_spawned < self.biglevel_threshold: #if the length of them big bois is higher than the threshold for em...
                 self.big_enemies.add(big_enemy) #add them to the list
                 self.bigenemies_spawned += 1 #increment the spawn counter
 
@@ -309,7 +309,7 @@ class Game():
                     self.bulbs_spawned += 1
                 else:
                     self.blind_bulbs.add(blind_bulb)
-                    self.bulbs_spawned += 1
+                    self.bulbs_spawned += 1"""
 
 
 
