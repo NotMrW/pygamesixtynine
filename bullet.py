@@ -14,7 +14,7 @@ class Bullet(pygame.sprite.Sprite):
         self.x = game.player.rect.centerx #Get dat X coord
         self.y = game.player.rect.centery #get dat Y coord
         self.rect = pygame.Rect(self.x,self.y,5,5) #get dat rect
-        self.color = (255, 200, 255) #Mmm, colors...
+        self.color = (188, 181, 2) #Mmm, colors...
  
         self.rect.center = (self.x, self.y) #Get a center
  

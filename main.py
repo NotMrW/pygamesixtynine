@@ -296,15 +296,15 @@ class Game():
 
 
             #Enemy Spawn Handlers
-            """if len(self.big_enemies) < self.biglevel_threshold and self.bigenemies_spawned < self.biglevel_threshold: #if the length of them big bois is higher than the threshold for em...
+            if len(self.big_enemies) < self.biglevel_threshold and self.bigenemies_spawned < self.biglevel_threshold: #if the length of them big bois is higher than the threshold for em...
                 self.big_enemies.add(big_enemy) #add them to the list
                 self.bigenemies_spawned += 1 #increment the spawn counter
-            """
-            if random.random() >self.settings.spawnrate and self.enemies_spawned < 1   : #if the Gambler is lucky...
+            
+            if random.random() >self.settings.spawnrate and self.enemies_spawned < self.level_threshold: #if the Gambler is lucky...
                 self.enemies.add(enemy) #add the cannon fodder
                 self.enemies_spawned += 1 #add to the valuse of enemies spawned [DEBUGGING]
             
-            """if random.random() < 0.2 and self.speedy_bois_spawned < self.speedylevel_threshold:
+            if random.random() < 0.2 and self.speedy_bois_spawned < self.speedylevel_threshold:
                 self.speedy_bois.add(speedy_boi)
                 self.speedy_bois_spawned +=1
 
@@ -314,7 +314,7 @@ class Game():
                     self.bulbs_spawned += 1
                 else:
                     self.blind_bulbs.add(blind_bulb)
-                    self.bulbs_spawned += 1"""
+                    self.bulbs_spawned += 1
 
 
 
