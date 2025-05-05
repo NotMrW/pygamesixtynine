@@ -274,6 +274,7 @@ class Game():
             shield = Shield(self)
 
 
+
             #Player-related existence On-Screen
             self.player.update() #update the player, mainly its position, tho
             self.player.blit(self) #draw the player
@@ -302,7 +303,7 @@ class Game():
                 self.speedy_bois.add(speedy_boi)
                 self.speedy_bois_spawned +=1
 
-            if random.random() < 1.001 and self.bulbs_spawned < 1:
+            if random.random() < 0.001 and self.bulbs_spawned < 1:
                 if random.random() < .00001:
                     self.death_bulbs.add(death_bulb)
                     self.bulbs_spawned += 1
