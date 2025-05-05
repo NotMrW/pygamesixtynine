@@ -22,8 +22,8 @@ class SpriteSheet():
     
     def get_images(self, xi, yi, width, height, number_of_frames):
         return [self.get_image(
-            xi + (i%4)*width, #fix, half+ frames not work
-            yi*(i//4), #me no liek, me angy
+            xi + i*width, #fix, half+ frames not work
+            yi, #me no liek, me angy
             width, #gaem bad; FIX
             height) 
             for i in range(number_of_frames)]
