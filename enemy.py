@@ -197,7 +197,7 @@ class SpeedyBoi(pygame.sprite.Sprite):
                 if player.shield > 0:
                     player.shield -= 2
                 else:
-                    player.HP -= 2 #maybe we should add a damage variable?
+                    player.HP -= 10 #maybe we should add a damage variable?
                 self.hp -= 1
 
     def knockback (self, bullet):

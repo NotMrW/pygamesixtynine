@@ -81,7 +81,7 @@ class Game():
 
 
         #Wave Setup
-        self.wave_number = 1 
+        self.wave_number = 999
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -98,7 +98,7 @@ class Game():
     def run(self): 
         """"Da function to run da gaem"""
         while self.running: #we use "running" value here for loop? Huh, neat
-
+            print(self.player.status, self.player.HP) 
 
             
             #DEBUGGING
@@ -296,25 +296,25 @@ class Game():
 
 
             #Enemy Spawn Handlers
-            """if len(self.big_enemies) < self.biglevel_threshold and self.bigenemies_spawned < self.biglevel_threshold: #if the length of them big bois is higher than the threshold for em...
+            if len(self.big_enemies) < self.biglevel_threshold and self.bigenemies_spawned < self.biglevel_threshold: #if the length of them big bois is higher than the threshold for em...
                 self.big_enemies.add(big_enemy) #add them to the list
                 self.bigenemies_spawned += 1 #increment the spawn counter
-            """
+            
             if random.random() >self.settings.spawnrate and self.enemies_spawned < 1   : #if the Gambler is lucky...
                 self.enemies.add(enemy) #add the cannon fodder
                 self.enemies_spawned += 1 #add to the valuse of enemies spawned [DEBUGGING]
             
-            """if random.random() < 0.2 and self.speedy_bois_spawned < self.speedylevel_threshold:
+            if random.random() < 0.2 and self.speedy_bois_spawned < self.speedylevel_threshold:
                 self.speedy_bois.add(speedy_boi)
                 self.speedy_bois_spawned +=1
 
-            if random.random() < 0.001 and self.bulbs_spawned < 1:
-                if random.random() < .00001:
+            if random.random() < 1.001 and self.bulbs_spawned < 1:
+                if random.random() < 1.00001:
                     self.death_bulbs.add(death_bulb)
                     self.bulbs_spawned += 1
                 else:
                     self.blind_bulbs.add(blind_bulb)
-                    self.bulbs_spawned += 1"""
+                    self.bulbs_spawned += 1
 
 
 
@@ -372,6 +372,16 @@ class Game():
                 else:
                     self.screen.fill("black")
                 self.screen.blit(self.death_surface, (self.settings.screen_WIDTH//2.25,self.settings.screen_HEIGHT//2))
+                for enemy in self.enemies:
+                    enemy.kill()
+                for big_enemy in self.big_enemies:
+                    big_enemy.kill()
+                for speedy_boi in self.speedy_bois:
+                    speedy_boi.kill()
+                for blind_bulb in self.blind_bulbs:
+                    blind_bulb.kill()
+                for death_bulb in self.death_bulbs:
+                    death_bulb.kill()    
             
 
 
