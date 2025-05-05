@@ -143,8 +143,9 @@ class Game():
                 # *Le Gasp* Mouse-Based Events?!
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == pygame.BUTTON_LEFT:
-                        bullet = Bullet(self)
-                        self.bullets.add(bullet)
+                        self.player.firing = True
+                if event.type == pygame.MOUSEBUTTONUP:
+                        self.player.firing = False
             
 
 
@@ -239,6 +240,10 @@ class Game():
                         
 
 
+            if self.player.firing == True:
+                bullet = Bullet(self)
+                self.bullets.add(bullet)
+
             #Bullet/Edge-Edge-of-Screen behaviors
             for bullet in self.bullets: #check dem bullets
                 if bullet.rect.left > self.settings.screen_WIDTH or bullet.rect.right < 0: #kill the bullets if they go off-screen
@@ -294,12 +299,12 @@ class Game():
             """if len(self.big_enemies) < self.biglevel_threshold and self.bigenemies_spawned < self.biglevel_threshold: #if the length of them big bois is higher than the threshold for em...
                 self.big_enemies.add(big_enemy) #add them to the list
                 self.bigenemies_spawned += 1 #increment the spawn counter
-
-            if random.random() >self.settings.spawnrate and self.enemies_spawned < self.level_threshold: #if the Gambler is lucky...
+            """
+            if random.random() >self.settings.spawnrate and self.enemies_spawned < 1   : #if the Gambler is lucky...
                 self.enemies.add(enemy) #add the cannon fodder
                 self.enemies_spawned += 1 #add to the valuse of enemies spawned [DEBUGGING]
             
-            if random.random() < 0.2 and self.speedy_bois_spawned < self.speedylevel_threshold:
+            """if random.random() < 0.2 and self.speedy_bois_spawned < self.speedylevel_threshold:
                 self.speedy_bois.add(speedy_boi)
                 self.speedy_bois_spawned +=1
 

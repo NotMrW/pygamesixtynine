@@ -22,7 +22,7 @@ class Player:
         self.rect.center = game.rect.center
         
         self.status = "none"
-        
+        self.weapon = "pistol"
 
         #We have to initialize the directions
         self.moving_up = False
