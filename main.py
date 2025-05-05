@@ -81,7 +81,7 @@ class Game():
 
 
         #Wave Setup
-        self.wave_number = 999
+        self.wave_number = 1
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -308,8 +308,8 @@ class Game():
                 self.speedy_bois.add(speedy_boi)
                 self.speedy_bois_spawned +=1
 
-            if random.random() < 1.001 and self.bulbs_spawned < 1:
-                if random.random() < 1.00001:
+            if random.random() < 0.00001 and self.bulbs_spawned < 1:
+                if random.random() < 0.0000001:
                     self.death_bulbs.add(death_bulb)
                     self.bulbs_spawned += 1
                 else:
