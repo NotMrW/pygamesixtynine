@@ -81,7 +81,7 @@ class Game():
 
 
         #Wave Setup
-        self.wave_number = 1
+        self.wave_number = 9
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number

@@ -242,7 +242,7 @@ class SpeedyBoi(pygame.sprite.Sprite):
 
         #initialize its speedy spritesheet
         self.spritesheet = SpriteSheet(r"sprites\Runner.png")
-        self.sprites = self.spritesheet.get_images(0,0,48,48,1)
+        self.sprites = self.spritesheet.get_images(0,0,32,32,1)
         self.image = self.sprites[0]
         
 
