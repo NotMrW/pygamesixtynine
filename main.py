@@ -92,7 +92,7 @@ class Game():
 
 
         #Setup Booleans
-        self.running = True #I guess we can have a loop for the gaem...dwa
+        self.running = True #I guess we can have a loop for the gaem...
 
 
 

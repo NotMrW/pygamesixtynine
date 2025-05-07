@@ -242,7 +242,7 @@ class SpeedyBoi(pygame.sprite.Sprite):
 
         #initialize its speedy spritesheet
         self.spritesheet = SpriteSheet(r"sprites\Runner.png")
-        self.sprites = self.spritesheet.get_images(0,0,48,48,1)
+        self.sprites = self.spritesheet.get_images(0,0,32,32,1)
         self.image = self.sprites[0]
         
 
@@ -284,6 +284,7 @@ class SpeedyBoi(pygame.sprite.Sprite):
                 else:
                     player.HP -= 10 #maybe we should add a damage variable?
                 self.hp -= 1
+                player.knockback(self, 50)
 
 
 
