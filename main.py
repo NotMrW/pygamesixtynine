@@ -180,7 +180,8 @@ class Game():
             if bullet_enemy_collisions:
                 total_enemies_hit = list(bullet_enemy_collisions.values())[0]
                 for enemy in total_enemies_hit:
-                    enemy.hp -= 1
+                    if self.player.weapon == "pistol":
+                        enemy.hp -=1
                     enemy.knockback(bullet)
                     if enemy.hp <= 0:
                         enemy.kill()
@@ -237,9 +238,6 @@ class Game():
                     death_bulb.hp -= 1
                     self.player.status = "permablind"
                     death_bulb.kill()
-                        
-
-
 
             if self.player.firing:
                 if self.player.weapon == "pistol":
