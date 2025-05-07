@@ -284,6 +284,7 @@ class SpeedyBoi(pygame.sprite.Sprite):
                 else:
                     player.HP -= 10 #maybe we should add a damage variable?
                 self.hp -= 1
+                player.knockback(self, 50)
 
 
 
