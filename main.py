@@ -36,7 +36,7 @@ class Game():
         self.clock = pygame.time.Clock() #get a clock going
         self.screen = pygame.display.set_mode((self.settings.screen_WIDTH, self.settings.screen_HEIGHT)) #set the screen up
         self.rect = self.screen.get_rect() #get that rect
-        pygame.display.set_caption("SpriteGame") #name game window
+        pygame.display.set_caption("ZambiFuckers") #name game window
         self.score = 0
         pygame.font.init()
         self.font = pygame.font.Font(None, 36) #get a font for the score
@@ -58,7 +58,8 @@ class Game():
 
         #Setup the sexy bullets
         self.bullets = pygame.sprite.Group()
-
+        self.time1 = 250
+        self.fire_rate = 0
 
 
         #Setup every enemy type
@@ -81,7 +82,7 @@ class Game():
 
 
         #Wave Setup
-        self.wave_number = 1
+        self.wave_number = 7
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -97,8 +98,7 @@ class Game():
 
     def run(self): 
         """"Da function to run da gaem"""
-        while self.running: #we use "running" value here for loop? Huh, neat
-            print(self.player.status, self.player.HP) 
+        while self.running: #we use "running" value here for loop? Huh, neat 
 
             
             #DEBUGGING
@@ -240,9 +240,15 @@ class Game():
                         
 
 
-            if self.player.firing == True:
-                bullet = Bullet(self)
-                self.bullets.add(bullet)
+
+            if self.player.firing:
+                if self.player.weapon == "pistol":
+                        self.fire_rate = pygame.time.get_ticks()//2
+                        print(pygame.time.get_ticks(),self.time1, self.fire_rate)
+                        if self.fire_rate >= self.time1:
+                            bullet = Bullet(self)
+                            self.bullets.add(bullet)
+                            self.time1 += 250
 
             #Bullet/Edge-Edge-of-Screen behaviors
             for bullet in self.bullets: #check dem bullets
