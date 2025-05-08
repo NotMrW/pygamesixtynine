@@ -28,7 +28,7 @@ class Player:
 
         #Variables regarding certain status of the player
         self.status = "none"
-        self.weapon = "pistol"
+        self.weapon = "automatica" #changed for testting
         self.firing = False
 
 

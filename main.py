@@ -182,6 +182,8 @@ class Game():
                 for enemy in total_enemies_hit:
                     if self.player.weapon == "pistol":
                         enemy.hp -=1
+                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                        enemy.hp -= 0.5
                     enemy.knockback(bullet)
                     if enemy.hp <= 0:
                         enemy.kill()
@@ -239,6 +241,9 @@ class Game():
                     self.player.status = "permablind"
                     death_bulb.kill()
 
+
+
+            #Gun Type Fire Rate handlers
             if self.player.firing:
                 if self.player.weapon == "pistol":
                         self.fire_rate = pygame.time.get_ticks()//2
@@ -247,6 +252,16 @@ class Game():
                             bullet = Bullet(self)
                             self.bullets.add(bullet)
                             self.time1 += 250
+
+                if self.player.weapon == "automatica": #PLACEHOLDER GUN TYPE NAME
+                        self.fire_rate = pygame.time.get_ticks()*2
+                        print(pygame.time.get_ticks(),self.time1, self.fire_rate)
+                        if self.fire_rate >= self.time1:
+                            bullet = Bullet(self)
+                            self.bullets.add(bullet)
+                            self.time1 += 250
+                
+
 
             #Bullet/Edge-Edge-of-Screen behaviors
             for bullet in self.bullets: #check dem bullets
