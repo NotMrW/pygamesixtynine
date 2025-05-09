@@ -391,7 +391,7 @@ class ZipperSkull(pygame.sprite.Sprite):
                     player.shield = 0
                 else:
                     player.HP -= 20
-            player.knockback(self, 250)
+                player.knockback(self, 250)
 
 
 

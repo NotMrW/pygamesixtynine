@@ -9,7 +9,7 @@ import math
 #import classes from other files
 from settings import Settings
 from player import Player
-from enemy import Enemy, BigEnemy, SpeedyBoi, BlindBulb, DeathBulb
+from enemy import Enemy, BigEnemy, SpeedyBoi, BlindBulb, DeathBulb, ZipperSkull
 from bullet import Bullet
 from item import Medkit, Shield
 
@@ -68,7 +68,7 @@ class Game():
         self.speedy_bois = pygame.sprite.Group()
         self.blind_bulbs = pygame.sprite.Group()
         self.death_bulbs = pygame.sprite.Group()
-
+        self.zipperskulls = pygame.sprite.Group()
 
 
         #Enemy-Specific Data Setup
@@ -78,17 +78,18 @@ class Game():
         self.enemies_killed = 0
         self.speedy_bois_spawned = 0
         self.speedy_bois_killed = 0
-
+        self.zipperskulls_spawned = 0
+        self.zipperskulls_killed = 0
 
 
         #Wave Setup
-        self.wave_number = 7
+        self.wave_number = 29
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
         self.biglevel_threshold = math.floor(self.wave_number // 5)
         self.speedylevel_threshold = 0+math.floor(self.wave_number//7)
-
+        self.zipperlevel_threshold = 0
 
 
         #Setup Booleans
@@ -124,7 +125,10 @@ class Game():
                     if event.key == pygame.K_SPACE:
                         bullet = Bullet(self)
                         self.bullets.add(bullet)
-
+                    if event.key == pygame.K_k:
+                        for enemy in self.enemies:
+                            enemy.kill()
+                            self.enemies_killed +=1
 
 
                 #More Keayboard-Based events
@@ -147,8 +151,14 @@ class Game():
                 if event.type == pygame.MOUSEBUTTONUP:
                         self.player.firing = False
             
-
-
+            if self.player.rect.left < 0:
+                self.player.rect.left = 0
+            elif self.player.rect.right > self.settings.screen_WIDTH:
+                self.player.rect.right = self.settings.screen_WIDTH
+            elif self.player.rect.top < 0:
+                self.player.rect.top = 0
+            elif self.player.rect.bottom > self.settings.screen_HEIGHT:
+                self.player.rect.bottom = self.settings.screen_HEIGHT
             #Player Status handlers
             if self.player.status == "blind":
                 game.screen.fill("white")
@@ -175,7 +185,7 @@ class Game():
             bullet_speedy_collisions = pygame.sprite.groupcollide(self.bullets, self.speedy_bois, True, False)
             bullet_blindbulb_collisions = pygame.sprite.groupcollide(self.bullets, self.blind_bulbs, True, False)
             bullet_deathbulb_collisions = pygame.sprite.groupcollide(self.bullets, self.death_bulbs, True, False)
-
+            bullet_zipperskull_collisions = pygame.sprite.groupcollide(self.bullets, self.zipperskulls, True, False)
 
 
             #Individual Bullet/Enemy Collision Setup
@@ -229,7 +239,7 @@ class Game():
                     bigenemy.knockback(bullet)
                     if bigenemy.hp <= 0: #if the HP of a specific big boi is 0 or lower...
                         bigenemy.kill() #ded
-                        self.score+=3 #one point!
+                        self.score+=3
                         self.score_surface = self.font.render(str(self.score), True, (255, 255, 255)) 
 
             if bullet_blindbulb_collisions:
@@ -252,10 +262,23 @@ class Game():
                         death_bulb.hp -=1
                     if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
                         death_bulb.hp -= 0.5
-                    self.player.status = "permablind"
-                    death_bulb.kill()
+                    if death_bulb.hp <= 0:
+                        self.player.status = "permablind"
+                        death_bulb.kill()
 
-
+            if bullet_zipperskull_collisions:
+                total_enemies_hit = list(bullet_zipperskull_collisions.values())[0]
+                for zipperskull in total_enemies_hit:
+                    if self.player.weapon == "pistol":
+                        zipperskull.hp -=1
+                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                        zipperskull.hp -= 0.5
+                    if zipperskull.hp <= 0:
+                        zipperskull.kill()
+                        self.score+=50
+                        self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
+                        self.zipperskulls_killed+=1 
+                        self.enemies_killed += 1
 
             #Gun Type Fire Rate handlers
             if self.player.firing:
@@ -305,7 +328,7 @@ class Game():
             speedy_boi = SpeedyBoi(self)
             blind_bulb = BlindBulb(self)
             death_bulb = DeathBulb(self)
-            
+            zipperskull = ZipperSkull(self)
 
 
             #INDIVIDUAL Item Setup
@@ -349,8 +372,10 @@ class Game():
                 else:
                     self.blind_bulbs.add(blind_bulb)
                     self.bulbs_spawned += 1
-
-
+            
+            if self.zipperskulls_spawned < self.zipperlevel_threshold:
+                self.zipperskulls.add(zipperskull)
+                self.zipperskulls_spawned += 1
 
             #Enemy Drawing Handlers
             for big_enemy in self.big_enemies: #Gotta check ALL of them big bois
@@ -359,6 +384,13 @@ class Game():
                 big_enemy.check_collide(self.player)
                 if big_enemy.hp <= 0:
                     big_enemy.kill() #if no HP, then DIE... DUH!
+
+            for zipperskull in self.zipperskulls:
+                zipperskull.draw(self)
+                zipperskull.update(self)
+                zipperskull.check_collide(self.player)
+                if zipperskull.hp <= 0:
+                    zipperskull.kill()
 
             for speedy_boi in self.speedy_bois:
                 speedy_boi.draw(self)
@@ -416,7 +448,7 @@ class Game():
                     blind_bulb.kill()
                 for death_bulb in self.death_bulbs:
                     death_bulb.kill()    
-            
+
 
 
             #Player Status Handlers
@@ -429,7 +461,7 @@ class Game():
 
 
             #Wave-Related code
-            if self.enemies_killed >= self.level_threshold: 
+            if self.wave_number%30 != 0 and self.enemies_killed >= self.level_threshold: 
                 self.wave_number += 1 
                 self.enemies_spawned = 0 
                 self.enemies_killed = 0
@@ -442,14 +474,49 @@ class Game():
                     blind_bulb.kill()
                 for bulb in self.death_bulbs:
                     death_bulb.kill()
-                if self.wave_number <= 10:
-                    self.level_threshold = 5 + 5*self.wave_number 
-                elif self.wave_number > 10: 
-                    self.level_threshold = 5 + 7*self.wave_number
-                if self.wave_number <= 10: 
-                    self.biglevel_threshold = math.floor(self.wave_number // 5)
-                elif self.wave_number > 10: 
-                    self.biglevel_threshold = math.floor(self.wave_number // 3)
+                if self.wave_number%30 == 0:
+                    self.zipperlevel_threshold = self.wave_number//30
+                    if self.zipperlevel_threshold < 1:
+                        self.zipperlevel_threshold == 1
+                    self.level_threshold = 0
+                else:
+                    if self.wave_number <= 10:
+                        self.level_threshold = 5 + 5*self.wave_number 
+                    elif self.wave_number > 10: 
+                        self.level_threshold = 5 + 7*self.wave_number
+                    if self.wave_number <= 10: 
+                        self.biglevel_threshold = math.floor(self.wave_number // 5)
+                    elif self.wave_number > 10: 
+                        self.biglevel_threshold = math.floor(self.wave_number // 3)
+                for medkit in self.medkits:
+                    medkit.kill()
+            elif self.wave_number%30 == 0 and self.zipperskulls_killed >= self.level_threshold:
+                self.wave_number += 1 
+                self.enemies_spawned = 0 
+                self.enemies_killed = 0
+                self.speedy_bois_spawned = 0
+                self.bigenemies_spawned = 0
+                self.bulbs_spawned = 0
+                for big_enemy in self.big_enemies:
+                    big_enemy.kill()
+                for bulb in self.blind_bulbs:
+                    blind_bulb.kill()
+                for bulb in self.death_bulbs:
+                    death_bulb.kill()
+                if self.wave_number%30 == 0:
+                    self.zipperlevel_threshold = self.wave_number//30
+                    if self.zipperlevel_threshold < 1:
+                        self.zipperlevel_threshold == 1
+                    self.level_threshold = 1
+                else:
+                    if self.wave_number <= 10:
+                        self.level_threshold = 5 + 5*self.wave_number 
+                    elif self.wave_number > 10: 
+                        self.level_threshold = 5 + 7*self.wave_number
+                    if self.wave_number <= 10: 
+                        self.biglevel_threshold = math.floor(self.wave_number // 5)
+                    elif self.wave_number > 10: 
+                        self.biglevel_threshold = math.floor(self.wave_number // 3)
                 for medkit in self.medkits:
                     medkit.kill()
             self.clock.tick(self.settings.FPS) 
