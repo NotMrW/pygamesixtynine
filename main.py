@@ -165,6 +165,8 @@ class Game():
                 self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255))
                 game.screen.blit(self.wave_surface, (50, 50))
 
+            if self.player.weapon == "pistol" and self.player.firing != True:
+                self.fire_rate = 248
 
 
             #Individual Bullet/Enemy Collision Setup
@@ -181,7 +183,7 @@ class Game():
                 total_enemies_hit = list(bullet_enemy_collisions.values())[0]
                 for enemy in total_enemies_hit:
                     if self.player.weapon == "pistol":
-                        enemy.hp -=1
+                        enemy.hp -= 1
                     if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
                         enemy.hp -= 0.5
                     enemy.knockback(bullet)
@@ -200,7 +202,10 @@ class Game():
             if bullet_speedy_collisions:
                 total_enemies_hit = list(bullet_speedy_collisions.values())[0]
                 for speedyboi in total_enemies_hit:
-                    speedyboi.hp -= 1
+                    if self.player.weapon == "pistol":
+                        speedy_boi.hp -= 1
+                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                        speedy_boi.hp -= 0.5
                     speedyboi.knockback(bullet)
                     if speedyboi.hp <= 0:
                         speedyboi.kill()
@@ -217,7 +222,10 @@ class Game():
             if bullet_bigenemy_collisions: #if bullets collided with Big Bois...
                 total_enemies_hit = list(bullet_bigenemy_collisions.values())[0] #fill a list with big enemy collisions' values
                 for bigenemy in total_enemies_hit: #loop through those listed collisions
-                    bigenemy.hp -= 1 #subtract HP from EACH Big Boi
+                    if self.player.weapon == "pistol":
+                        bigenemy.hp -=1
+                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                        bigenemy.hp -= 0.5
                     bigenemy.knockback(bullet)
                     if bigenemy.hp <= 0: #if the HP of a specific big boi is 0 or lower...
                         bigenemy.kill() #ded
@@ -227,7 +235,10 @@ class Game():
             if bullet_blindbulb_collisions:
                 total_enemies_hit = list(bullet_blindbulb_collisions.values())[0]
                 for blind_bulb in total_enemies_hit:
-                    blind_bulb.hp -= 1
+                    if self.player.weapon == "pistol":
+                        blind_bulb.hp -=1
+                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                        blind_bulb.hp -= 0.5
                     blind_bulb.knockback(bullet)
                     if blind_bulb.hp <= 0:
                         self.player.status = "blind"
@@ -237,7 +248,10 @@ class Game():
             if bullet_deathbulb_collisions:
                 total_enemies_hit = list(bullet_deathbulb_collisions.values())[0]
                 for death_bulb in total_enemies_hit:
-                    death_bulb.hp -= 1
+                    if self.player.weapon == "pistol":
+                        death_bulb.hp -=1
+                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                        death_bulb.hp -= 0.5
                     self.player.status = "permablind"
                     death_bulb.kill()
 
@@ -246,15 +260,16 @@ class Game():
             #Gun Type Fire Rate handlers
             if self.player.firing:
                 if self.player.weapon == "pistol":
-                        self.fire_rate = pygame.time.get_ticks()//2
-                        print(pygame.time.get_ticks(),self.time1, self.fire_rate)
+                        self.fire_rate+=2
+                        print(self.fire_rate)
                         if self.fire_rate >= self.time1:
                             bullet = Bullet(self)
                             self.bullets.add(bullet)
-                            self.time1 += 250
+                            self.time1 = 250
+                            self.fire_rate = 200
 
                 if self.player.weapon == "automatica": #PLACEHOLDER GUN TYPE NAME
-                        self.fire_rate = pygame.time.get_ticks()*2
+                        self.fire_rate += 50
                         print(pygame.time.get_ticks(),self.time1, self.fire_rate)
                         if self.fire_rate >= self.time1:
                             bullet = Bullet(self)
