@@ -462,12 +462,11 @@ class Game():
             if self.player.HP > 50:
                 self.player.HP = 50 #prevent overheal
             if self.player.HP <= 0:
-                
                 #mixer.init()
                 if not self.dead_music_playing:
                     mixer.stop()
                     mixer.music.load("Audio\Death Theme.mp3")
-                    mixer.music.play()
+                    mixer.music.play(3, 0, 4000)
                     self.dead_music_playing = True
 
                 if self.player.status == "permablind":
