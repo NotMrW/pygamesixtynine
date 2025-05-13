@@ -43,4 +43,15 @@ class Bullet(pygame.sprite.Sprite):
         self.y += self.direction[1] * self.settings.bullet_SPEED #KEEP MOVING, vertically
         self.rect.topleft = (self.x, self.y) #identify the topleft of dat rect
        
- 
+
+
+    #need to relocate this so we can test it
+    def get_shotgun(self, game):
+        dir = self.get_direction(game)
+        theta = math.acos(dir[0])
+
+        d_theta = 2
+        bullet_1_x = math.cos(dir[0]+d_theta)
+        bullet_1_y = math.sin(dir[1]+d_theta)
+        bullet_2_x = math.cos(dir[0]-d_theta)
+        bullet_2_y = math.sin(dir[1]-d_theta)

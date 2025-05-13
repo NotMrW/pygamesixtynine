@@ -29,7 +29,7 @@ class Game():
         mixer.music.set_volume(0.7)
         mixer.music.play()
 
-
+        self.dead_music_playing = False
 
         #Main Setup
         self.settings = Settings() #initialize settings
@@ -83,7 +83,7 @@ class Game():
 
 
         #Wave Setup
-        self.wave_number = 29
+        self.wave_number = 1
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -194,8 +194,10 @@ class Game():
                 for enemy in total_enemies_hit:
                     if self.player.weapon == "pistol":
                         enemy.hp -= 1
-                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                    if self.player.weapon == "automatica":
                         enemy.hp -= 0.5
+                    if self.player.weapon == "devlogger":
+                        enemy.hp -= 10
                     enemy.knockback(bullet)
                     if enemy.hp <= 0:
                         enemy.kill()
@@ -214,8 +216,10 @@ class Game():
                 for speedyboi in total_enemies_hit:
                     if self.player.weapon == "pistol":
                         speedy_boi.hp -= 1
-                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                    if self.player.weapon == "automatica":
                         speedy_boi.hp -= 0.5
+                    if self.player.weapon == "devlogger":
+                        speedy_boi.hp -= 10
                     speedyboi.knockback(bullet)
                     if speedyboi.hp <= 0:
                         speedyboi.kill()
@@ -234,8 +238,10 @@ class Game():
                 for bigenemy in total_enemies_hit: #loop through those listed collisions
                     if self.player.weapon == "pistol":
                         bigenemy.hp -=1
-                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                    if self.player.weapon == "automatica":
                         bigenemy.hp -= 0.5
+                    if self.player.weapon == "devlogger":
+                        bigenemy.hp -= 10
                     bigenemy.knockback(bullet)
                     if bigenemy.hp <= 0: #if the HP of a specific big boi is 0 or lower...
                         bigenemy.kill() #ded
@@ -247,8 +253,10 @@ class Game():
                 for blind_bulb in total_enemies_hit:
                     if self.player.weapon == "pistol":
                         blind_bulb.hp -=1
-                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                    if self.player.weapon == "automatica":
                         blind_bulb.hp -= 0.5
+                    if self.player.weapon == "devlogger":
+                        blind_bulb.hp -= 10
                     blind_bulb.knockback(bullet)
                     if blind_bulb.hp <= 0:
                         self.player.status = "blind"
@@ -260,8 +268,10 @@ class Game():
                 for death_bulb in total_enemies_hit:
                     if self.player.weapon == "pistol":
                         death_bulb.hp -=1
-                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                    if self.player.weapon == "automatica":
                         death_bulb.hp -= 0.5
+                    if self.player.weapon == "devlogger":
+                        death_bulb.hp -= 10
                     if death_bulb.hp <= 0:
                         self.player.status = "permablind"
                         death_bulb.kill()
@@ -271,14 +281,18 @@ class Game():
                 for zipperskull in total_enemies_hit:
                     if self.player.weapon == "pistol":
                         zipperskull.hp -=1
-                    if self.player.weapon == "automatica": #PLACEHOLDER WEAPON NAME
+                    if self.player.weapon == "automatica":
                         zipperskull.hp -= 0.5
+                    if self.player.weapon == "devlogger":
+                        zipperskull.hp -= 10
                     if zipperskull.hp <= 0:
                         zipperskull.kill()
                         self.score+=50
                         self.score_surface = self.font.render(str(self.score), True, (255, 255, 255))
                         self.zipperskulls_killed+=1 
                         self.enemies_killed += 1
+
+
 
             #Gun Type Fire Rate handlers
             if self.player.firing:
@@ -291,7 +305,7 @@ class Game():
                             self.time1 = 250
                             self.fire_rate = 200
 
-                if self.player.weapon == "automatica": #PLACEHOLDER GUN TYPE NAME
+                if self.player.weapon == "automatica":
                         self.fire_rate += 50
                         print(pygame.time.get_ticks(),self.time1, self.fire_rate)
                         if self.fire_rate >= self.time1:
@@ -299,6 +313,22 @@ class Game():
                             self.bullets.add(bullet)
                             self.time1 += 250
                 
+                if self.player.weapon == "shotgun": #semi-auto
+                        self.fire_rate += 5
+                        print(pygame.time.get_ticks(),self.time1, self.fire_rate)
+                        if self.fire_rate >= self.time1:
+                            bullet = Bullet(self)
+                            self.bullets.add(bullet)
+                            self.time1 += 250
+
+                if self.player.weapon == "devlogger":
+                        self.fire_rate += 500
+                        print(pygame.time.get_ticks(),self.time1, self.fire_rate)
+                        if self.fire_rate >= self.time1:
+                            bullet = Bullet(self)
+                            self.bullets.add(bullet)
+                            self.time1 += 250
+
 
 
             #Bullet/Edge-Edge-of-Screen behaviors
@@ -387,7 +417,7 @@ class Game():
 
             for zipperskull in self.zipperskulls:
                 zipperskull.draw(self)
-                zipperskull.update(self)
+                zipperskull.update(self.player)
                 zipperskull.check_collide(self.player)
                 if zipperskull.hp <= 0:
                     zipperskull.kill()
@@ -432,6 +462,14 @@ class Game():
             if self.player.HP > 50:
                 self.player.HP = 50 #prevent overheal
             if self.player.HP <= 0:
+                
+                #mixer.init()
+                if not self.dead_music_playing:
+                    mixer.stop()
+                    mixer.music.load("Audio\Death Theme.mp3")
+                    mixer.music.play()
+                    self.dead_music_playing = True
+
                 if self.player.status == "permablind":
                     self.death_surface = self.font.render("YOU ARE PERMANENTLY BLIND: U R DED", True, (0, 0, 0))
                     self.screen.fill("white")
@@ -448,6 +486,8 @@ class Game():
                     blind_bulb.kill()
                 for death_bulb in self.death_bulbs:
                     death_bulb.kill()    
+
+                
 
 
 

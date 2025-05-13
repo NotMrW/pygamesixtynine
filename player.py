@@ -28,7 +28,7 @@ class Player:
 
         #Variables regarding certain status of the player
         self.status = "none"
-        self.weapon = "automatica" #changed for testting
+        self.weapon = "shotgun" #changed for testting #List: pistol, automatica, devlogger
         self.firing = False
 
 
