@@ -129,6 +129,12 @@ class Game():
                         for enemy in self.enemies:
                             enemy.kill()
                             self.enemies_killed +=1
+                    """if event.key == pygame.K_e:
+                        self.player.weapon = self.player.weapon_list[self.player.weapon_list.index(self.player.weapon)+1]
+                        print(self.player.firing)
+                        if self.player.weapon == self.player.weapon_list[-1]:
+                                self.player.weapon = self.player.weapon_list[0]""" #bullshit no worky
+
 
 
                 #More Keayboard-Based events
@@ -164,7 +170,6 @@ class Game():
                 game.screen.fill("white")
                 pygame.display.flip()
                 endblindtimer = pygame.time.get_ticks()
-                print(blindtimer, endblindtimer)
                 if endblindtimer >= blindtimer:
                     self.player.status = "none"
             else: #THIS STILL WORKS, ACE!
@@ -179,6 +184,7 @@ class Game():
                 self.fire_rate = 248
 
 
+
             #Individual Bullet/Enemy Collision Setup
             bullet_enemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False) #Bullet/Little_shit collisions
             bullet_bigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, False)
@@ -186,6 +192,7 @@ class Game():
             bullet_blindbulb_collisions = pygame.sprite.groupcollide(self.bullets, self.blind_bulbs, True, False)
             bullet_deathbulb_collisions = pygame.sprite.groupcollide(self.bullets, self.death_bulbs, True, False)
             bullet_zipperskull_collisions = pygame.sprite.groupcollide(self.bullets, self.zipperskulls, True, False)
+
 
 
             #Individual Bullet/Enemy Collision Setup
@@ -297,17 +304,15 @@ class Game():
             #Gun Type Fire Rate handlers
             if self.player.firing:
                 if self.player.weapon == "pistol":
-                        self.fire_rate+=2
-                        print(self.fire_rate)
-                        if self.fire_rate >= self.time1:
-                            bullet = Bullet(self)
-                            self.bullets.add(bullet)
-                            self.time1 = 250
-                            self.fire_rate = 200
+                    self.fire_rate+=2
+                    if self.fire_rate >= self.time1:
+                        bullet = Bullet(self)
+                        self.bullets.add(bullet)
+                        self.time1 = 250
+                        self.fire_rate = 200
 
                 if self.player.weapon == "automatica":
                         self.fire_rate += 50
-                        print(pygame.time.get_ticks(),self.time1, self.fire_rate)
                         if self.fire_rate >= self.time1:
                             bullet = Bullet(self)
                             self.bullets.add(bullet)
@@ -315,20 +320,60 @@ class Game():
                 
                 if self.player.weapon == "shotgun": #semi-auto
                         self.fire_rate += 5
-                        print(pygame.time.get_ticks(),self.time1, self.fire_rate)
                         if self.fire_rate >= self.time1:
-                            bullet = Bullet(self)
-                            self.bullets.add(bullet)
+                            for i in range(6):
+                                bullet = Bullet(self)
+                                self.bullets.add(bullet)
                             self.time1 += 250
 
                 if self.player.weapon == "devlogger":
-                        self.fire_rate += 500
-                        print(pygame.time.get_ticks(),self.time1, self.fire_rate)
-                        if self.fire_rate >= self.time1:
-                            bullet = Bullet(self)
-                            self.bullets.add(bullet)
-                            self.time1 += 250
-
+                    self.fire_rate += 500
+                    if self.fire_rate >= self.time1:
+                        bullet = Bullet(self)
+                        self.bullets.add(bullet)
+                        self.time1 += 250
+                
+                if self.player.weapon == "AR":
+                    self.fire_rate +=25
+                    self.fire_rate >= self.time1
+                    bullet = Bullet(self)
+                    self.bullets.add(bullet)
+                    self.time1 += 250
+                
+                if self.player.weapon == "LMG":
+                    self.fire_rate = pygame.time.get_ticks()//1
+                    self.fire_rate >= self.time1
+                    bullet = Bullet(self)
+                    self.bullets.add(bullet)
+                    self.time1 += 250
+                
+                if self.player.weapon == "Rifle":
+                    self.fire_rate = pygame.time.get_ticks()//6
+                    self.fire_rate >= self.time1
+                    bullet = Bullet(self)
+                    self.bullets.add(bullet)
+                    self.time1 += 250
+                
+                if self.player.weapon == "20mmRifle":
+                    self.fire_rate = pygame.time.get_ticks()//8
+                    self.fire_rate >= self.time1
+                    bullet = Bullet(self)
+                    self.bullets.add(bullet)
+                    self.time1 += 250
+                
+                if self.player.weapon == "RPG-7":
+                    self.fire_rate = pygame.time.get_ticks()//10
+                    self.fire_rate >= self.time1
+                    bullet = Bullet(self)
+                    self.bullets.add(bullet)
+                    self.time1 += 250
+                
+                if self.player.weapon == "Death-Machine":
+                    self.fire_rate = pygame.time.get_ticks()//1
+                    self.fire_rate >= self.time1
+                    bullet = Bullet(self)
+                    self.bullets.add(bullet)
+                    self.time1 += 250
 
 
             #Bullet/Edge-Edge-of-Screen behaviors
