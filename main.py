@@ -198,6 +198,8 @@ class Game():
                         enemy.hp -= 0.5
                     if self.player.weapon == "devlogger":
                         enemy.hp -= 10
+                    if self.player.weapon == "shotgun":
+                        enemy.hp -= 1
                     enemy.knockback(bullet)
                     if enemy.hp <= 0:
                         enemy.kill()
@@ -298,7 +300,6 @@ class Game():
             if self.player.firing:
                 if self.player.weapon == "pistol":
                         self.fire_rate+=2
-                        print(self.fire_rate)
                         if self.fire_rate >= self.time1:
                             bullet = Bullet(self)
                             self.bullets.add(bullet)
@@ -307,7 +308,6 @@ class Game():
 
                 if self.player.weapon == "automatica":
                         self.fire_rate += 50
-                        print(pygame.time.get_ticks(),self.time1, self.fire_rate)
                         if self.fire_rate >= self.time1:
                             bullet = Bullet(self)
                             self.bullets.add(bullet)
@@ -315,15 +315,15 @@ class Game():
                 
                 if self.player.weapon == "shotgun": #semi-auto
                         self.fire_rate += 5
-                        print(pygame.time.get_ticks(),self.time1, self.fire_rate)
                         if self.fire_rate >= self.time1:
-                            bullet = Bullet(self)
-                            self.bullets.add(bullet)
+                            for i in range(8):
+                                bullet = Bullet(self)
+                                bullet.direction[0], bullet.direction[1] = bullet.get_shotgun(self)
+                                self.bullets.add(bullet)
                             self.time1 += 250
 
                 if self.player.weapon == "devlogger":
                         self.fire_rate += 500
-                        print(pygame.time.get_ticks(),self.time1, self.fire_rate)
                         if self.fire_rate >= self.time1:
                             bullet = Bullet(self)
                             self.bullets.add(bullet)
@@ -359,6 +359,7 @@ class Game():
             blind_bulb = BlindBulb(self)
             death_bulb = DeathBulb(self)
             zipperskull = ZipperSkull(self)
+
 
 
             #INDIVIDUAL Item Setup
@@ -406,6 +407,8 @@ class Game():
             if self.zipperskulls_spawned < self.zipperlevel_threshold:
                 self.zipperskulls.add(zipperskull)
                 self.zipperskulls_spawned += 1
+
+
 
             #Enemy Drawing Handlers
             for big_enemy in self.big_enemies: #Gotta check ALL of them big bois
@@ -464,9 +467,8 @@ class Game():
             if self.player.HP <= 0:
                 #mixer.init()
                 if not self.dead_music_playing:
-                    mixer.stop()
                     mixer.music.load("Audio\Death Theme.mp3")
-                    mixer.music.play(3, 0, 4000)
+                    mixer.music.play(3, 0, 6000)
                     self.dead_music_playing = True
 
                 if self.player.status == "permablind":
@@ -485,8 +487,6 @@ class Game():
                     blind_bulb.kill()
                 for death_bulb in self.death_bulbs:
                     death_bulb.kill()    
-
-                
 
 
 
@@ -529,6 +529,8 @@ class Game():
                         self.biglevel_threshold = math.floor(self.wave_number // 3)
                 for medkit in self.medkits:
                     medkit.kill()
+
+
             elif self.wave_number%30 == 0 and self.zipperskulls_killed >= self.level_threshold:
                 self.wave_number += 1 
                 self.enemies_spawned = 0 

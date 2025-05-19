@@ -1,6 +1,7 @@
 #import them modules
 import pygame
 import math
+import random
 
 #import them other files, foo
 from settings import Settings
@@ -48,10 +49,11 @@ class Bullet(pygame.sprite.Sprite):
     #need to relocate this so we can test it
     def get_shotgun(self, game):
         dir = self.get_direction(game)
-        theta = math.acos(dir[0])
+        theta_x = math.acos(dir[0])
+        theta_y = math.acos(dir[1])
 
         d_theta = 2
-        bullet_1_x = math.cos(dir[0]+d_theta)
-        bullet_1_y = math.sin(dir[1]+d_theta)
-        bullet_2_x = math.cos(dir[0]-d_theta)
-        bullet_2_y = math.sin(dir[1]-d_theta)
+        bullet_1_x = math.cos(theta_x + d_theta)
+        bullet_1_y = math.sin(theta_y + d_theta)
+
+        return bullet_1_x, bullet_1_y
