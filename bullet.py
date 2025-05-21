@@ -47,22 +47,19 @@ class Bullet(pygame.sprite.Sprite):
 
 
     #need to relocate this so we can test it
-    def get_shotgun(self, game):
+    def get_shotgun(self, game, spread):
         dir = self.get_direction(game)
-        theta_x = math.acos(dir[0])
-        theta_y = math.acos(dir[1])
+        theta= math.acos(dir[0])
+        
+        print(spread,-spread)
+        d_theta = random.uniform(-spread, spread)
 
-        d_theta = random.uniform(0.1, 0.2)
+        new_theta = theta + d_theta
 
-        if random.random() > 0.5:
-            bullet_1_x = math.cos(theta_x + d_theta)
-        else:
-            bullet_1_x = math.cos(theta_x - d_theta)
+        bullet_1_x = math.cos(new_theta)
+        bullet_1_y = math.sin(new_theta)
 
-        if random.random() > 0.5:
-            bullet_1_y = math.sin(theta_y + d_theta)
-        else:
-            bullet_1_y = math.sin(theta_y - d_theta)
-
+        if dir[1] < 0:
+            bullet_1_y = -bullet_1_y
 
         return bullet_1_x, bullet_1_y

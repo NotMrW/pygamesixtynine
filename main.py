@@ -325,16 +325,19 @@ class Game():
                         if self.fire_rate >= self.time1:
                             for i in range(8):
                                 bullet = Bullet(self)
-                                bullet.direction[0], bullet.direction[1] = bullet.get_shotgun(self)
+                                bullet.direction[0], bullet.direction[1] = bullet.get_shotgun(self, self.settings.bullet_SPREAD)
                                 self.bullets.add(bullet)
-                                print(bullet.direction)
-                            print("END GROUP")
+                            print("[END GROUP]")
+                            
                             self.time1 += 250
 
                 if self.player.weapon == "devlogger":
                         self.fire_rate += 500
                         if self.fire_rate >= self.time1:
-                            bullet = Bullet(self)
+                            for i in range(16):
+                                bullet = Bullet(self)
+                                bullet.direction[0], bullet.direction[1] = bullet.get_shotgun(self, self.settings.bullet_SPREAD*2)
+                                self.bullets.add(bullet)
                             self.bullets.add(bullet)
                             self.time1 += 250
 

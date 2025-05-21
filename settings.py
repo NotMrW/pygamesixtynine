@@ -23,6 +23,7 @@ class Settings():
 
         #Just some more sorting to find stats easier, did you expect more?
         self.bullet_SPEED = 25 #SPEED
+        self.bullet_SPREAD = 0.3
         self.KNOCKBACK_AMOUNT = 20
 
 
