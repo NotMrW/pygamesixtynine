@@ -83,7 +83,7 @@ class Game():
 
 
         #Wave Setup
-        self.wave_number = 1
+        self.wave_number = 291
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -179,6 +179,8 @@ class Game():
                 game.screen.blit(self.score_surface, (50,100))
                 self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255))
                 game.screen.blit(self.wave_surface, (50, 50))
+                self.health_surface = self.font.render(str(self.player.HP), True, (255,255,255))
+                game.screen.blit(self.health_surface, (self.settings.screen_WIDTH-50, 50))
 
             if self.player.weapon == "pistol" and self.player.firing != True:
                 self.fire_rate = 248
@@ -483,6 +485,9 @@ class Game():
                     self.screen.fill("white")
                 else:
                     self.screen.fill("black")
+                    self.scare_image = pygame.image.load('sprites\DeathJumpscare.png')
+                    self.scare_image = pygame.transform.scale(self.scare_image, (self.settings.screen_WIDTH, self.settings.screen_HEIGHT))
+                    self.screen.blit(self.scare_image, (0,0))
                 self.screen.blit(self.death_surface, (self.settings.screen_WIDTH//2.25,self.settings.screen_HEIGHT//2))
                 for enemy in self.enemies:
                     enemy.kill()
