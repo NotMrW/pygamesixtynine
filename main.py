@@ -329,6 +329,8 @@ class Game():
                                 bullet = Bullet(self)
                                 bullet.direction[0], bullet.direction[1] = bullet.get_shotgun(self)
                                 self.bullets.add(bullet)
+                                print(bullet.direction)
+                            print("END GROUP")
                             self.time1 += 250
 
                 if self.player.weapon == "devlogger":

@@ -52,8 +52,17 @@ class Bullet(pygame.sprite.Sprite):
         theta_x = math.acos(dir[0])
         theta_y = math.acos(dir[1])
 
-        d_theta = 2
-        bullet_1_x = math.cos(theta_x + d_theta)
-        bullet_1_y = math.sin(theta_y + d_theta)
+        d_theta = random.uniform(0.1, 0.2)
+
+        if random.random() > 0.5:
+            bullet_1_x = math.cos(theta_x + d_theta)
+        else:
+            bullet_1_x = math.cos(theta_x - d_theta)
+
+        if random.random() > 0.5:
+            bullet_1_y = math.sin(theta_y + d_theta)
+        else:
+            bullet_1_y = math.sin(theta_y - d_theta)
+
 
         return bullet_1_x, bullet_1_y
