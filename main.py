@@ -129,6 +129,12 @@ class Game():
                         for enemy in self.enemies:
                             enemy.kill()
                             self.enemies_killed +=1
+                    """if event.key == pygame.K_e:
+                        self.player.weapon = self.player.weapon_list[self.player.weapon_list.index(self.player.weapon)+1]
+                        print(self.player.firing)
+                        if self.player.weapon == self.player.weapon_list[-1]:
+                                self.player.weapon = self.player.weapon_list[0]""" #bullshit no worky
+
 
 
                 #More Keayboard-Based events
@@ -164,7 +170,6 @@ class Game():
                 game.screen.fill("white")
                 pygame.display.flip()
                 endblindtimer = pygame.time.get_ticks()
-                print(blindtimer, endblindtimer)
                 if endblindtimer >= blindtimer:
                     self.player.status = "none"
             else: #THIS STILL WORKS, ACE!
@@ -179,6 +184,7 @@ class Game():
                 self.fire_rate = 248
 
 
+
             #Individual Bullet/Enemy Collision Setup
             bullet_enemy_collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False) #Bullet/Little_shit collisions
             bullet_bigenemy_collisions = pygame.sprite.groupcollide(self.bullets, self.big_enemies, True, False)
@@ -186,6 +192,7 @@ class Game():
             bullet_blindbulb_collisions = pygame.sprite.groupcollide(self.bullets, self.blind_bulbs, True, False)
             bullet_deathbulb_collisions = pygame.sprite.groupcollide(self.bullets, self.death_bulbs, True, False)
             bullet_zipperskull_collisions = pygame.sprite.groupcollide(self.bullets, self.zipperskulls, True, False)
+
 
 
             #Individual Bullet/Enemy Collision Setup

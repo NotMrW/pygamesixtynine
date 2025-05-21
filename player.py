@@ -23,6 +23,7 @@ class Player:
         self.death_image = ("sprites/manFace.png")
         self.rect = self.image.get_rect()
         self.rect.center = game.rect.center
+        self.weapon_list = ["pistol", "automatica", "devlogger"]
         
 
 
