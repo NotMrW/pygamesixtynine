@@ -29,7 +29,7 @@ class Player:
 
         #Variables regarding certain status of the player
         self.status = "none"
-        self.weapon = "shotgun" #List: pistol, automatica, devlogger
+        self.weapon = "pistol" #List: pistol, automatica, devlogger
         self.firing = False
 
 
