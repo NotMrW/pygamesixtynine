@@ -83,7 +83,7 @@ class Game():
 
 
         #Wave Setup
-        self.wave_number = 999
+        self.wave_number = 1
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -103,7 +103,7 @@ class Game():
 
             
             #DEBUGGING
-            #print(self.player.status, self.player.HP, self.player.shield)
+            print(self.player.weapon, self.fire_rate, self.time1, self.player.firing)
 
 
 
@@ -180,9 +180,15 @@ class Game():
                 self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255))
                 game.screen.blit(self.wave_surface, (50, 50))
 
-            if self.player.weapon == "pistol" and self.player.firing != True:
-                self.fire_rate = 248
+            if self.player.firing == False:
+                self.time1 = 250
 
+            if self.player.weapon == "pistol" and self.player.firing == False:
+                self.fire_rate = 248
+            elif self.player.weapon == "shotgun" and self.player.firing == False:
+                self.fire_rate = 245
+            elif self.player.firing == False:
+                self.fire_rate = 0
 
 
             #Individual Bullet/Enemy Collision Setup
