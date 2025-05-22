@@ -24,3 +24,6 @@ Enemy Concept: Crawler;
     1 HP
 
     As fast as the Player (or as fast as Big Enemy if it's too difficult)
+
+
+Make a whole DEVELOPER LOADOUT for when the code is used
