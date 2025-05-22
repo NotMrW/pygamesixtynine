@@ -213,7 +213,8 @@ class Game():
                     if self.player.weapon == "devlogger":
                         enemy.hp -= 10
                     if self.player.weapon == "shotgun":
-                        enemy.hp -= 1
+                        for i in range(list(bullet_enemy_collisions.values())):
+                            enemy.hp -= 1
                     enemy.knockback(bullet)
                     if enemy.hp <= 0:
                         enemy.kill()
