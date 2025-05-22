@@ -123,8 +123,7 @@ class Game():
                     if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                         self.player.moving_down = True
                     if event.key == pygame.K_SPACE:
-                        bullet = Bullet(self)
-                        self.bullets.add(bullet)
+                        self.player.firing = True
                     if event.key == pygame.K_k:
                         for enemy in self.enemies:
                             enemy.kill()
@@ -147,6 +146,8 @@ class Game():
                         self.player.moving_up = False
                     if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                         self.player.moving_down = False
+                    if event.key == pygame.K_SPACE:
+                        self.player.firing = False
                 
 
 
