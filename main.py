@@ -129,13 +129,15 @@ class Game():
                         for enemy in self.enemies:
                             enemy.kill()
                             self.enemies_killed +=1
-                    """if event.key == pygame.K_e:
-                        self.player.weapon = self.player.weapon_list[self.player.weapon_list.index(self.player.weapon)+1]
-                        print(self.player.firing)
-                        if self.player.weapon == self.player.weapon_list[-1]:
-                                self.player.weapon = self.player.weapon_list[0]""" #bullshit no worky
+                    if event.key == pygame.K_e:
+                        if self.player.weapon == "pistol":
+                            self.player.weapon  = "automatica"
 
+                        elif self.player.weapon == "automatica":
+                            self.player.weapon  = "shotgun"
 
+                        elif self.player.weapon == "shotgun": #semi-auto
+                            self.player.weapon = "pistol"
 
                 #More Keayboard-Based events
                 if event.type == pygame.KEYUP:
