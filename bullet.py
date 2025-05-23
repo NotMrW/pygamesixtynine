@@ -51,7 +51,6 @@ class Bullet(pygame.sprite.Sprite):
         dir = self.get_direction(game)
         theta= math.acos(dir[0])
         
-        print(spread,-spread)
         d_theta = random.uniform(-spread, spread)
 
         new_theta = theta + d_theta

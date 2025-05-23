@@ -12,17 +12,20 @@ class Settings():
 
 
         #Speed stat sorting
+        self.speed_mod = 1
+
+
         self.player_SPEED = 3 #Damn, speed equaled 3
-        self.enemy_SPEED = self.player_SPEED * (2/3)
-        self.big_boi_SPEED = self.player_SPEED/2 #original speed: HALF of player's speed
-        self.speedy_boi_SPEED = self.player_SPEED * 2.75 #original: TRIPLE the player's speed
-        self.blindBulb_SPEED = self.player_SPEED / 3 #started as a third of player's speed
-        self.zipper_SPEED = self.player_SPEED/4 #initially a QUARTER of the player's speed
+        self.enemy_SPEED = 2 * self.speed_mod
+        self.big_boi_SPEED = 1.5 * self.speed_mod #original speed: HALF of player's speed
+        self.speedy_boi_SPEED = 8.25 * self.speed_mod #original: 2.75x player speed
+        self.blindBulb_SPEED = 1 * self.speed_mod #started as a third of player's speed
+        self.zipper_SPEED = 0.75 * self.speed_mod #initially a QUARTER of the player's speed
 
 
 
         #Just some more sorting to find stats easier, did you expect more?
-        self.bullet_SPEED = 25 #SPEED
+        self.bullet_SPEED = 33 #SPEED
         self.bullet_SPREAD = 0.3
         self.KNOCKBACK_AMOUNT = 20
 
@@ -30,7 +33,8 @@ class Settings():
 
         #even more sorting, is this getting old yet?
         self.ENEMY_FLASH_RATE = .01 #flashy flashy
-        self.spawnrate = 0.8
+        self.spawnrate = 0.001
+        
         
 
         

@@ -15,11 +15,20 @@ from item import Medkit, Shield
 
 
 
+
+
+
 #Define the Game as a CLASS
 class Game():
     frame_count = 0
     def __init__(self):
         """Initialize da Gaem"""
+
+
+
+        self.CODE = [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_b, pygame.K_a, pygame.K_k, pygame.K_o, pygame.K_n, pygame.K_a, pygame.K_m, pygame.K_i]
+        self.code = []
+        self.index = 0
 
 
 
@@ -62,6 +71,7 @@ class Game():
         self.fire_rate = 0
 
 
+
         #Setup every enemy type
         self.enemies = pygame.sprite.Group()
         self.big_enemies = pygame.sprite.Group()
@@ -69,6 +79,7 @@ class Game():
         self.blind_bulbs = pygame.sprite.Group()
         self.death_bulbs = pygame.sprite.Group()
         self.zipperskulls = pygame.sprite.Group()
+
 
 
         #Enemy-Specific Data Setup
@@ -82,6 +93,7 @@ class Game():
         self.zipperskulls_killed = 0
 
 
+
         #Wave Setup
         self.wave_number = 6
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
@@ -90,6 +102,7 @@ class Game():
         self.biglevel_threshold = math.floor(self.wave_number // 5)
         self.speedylevel_threshold = 0+math.floor(self.wave_number//7)
         self.zipperlevel_threshold = 0
+
 
 
         #Setup Booleans
@@ -101,9 +114,10 @@ class Game():
         """"Da function to run da gaem"""
         while self.running: #we use "running" value here for loop? Huh, neat 
 
+
             
             #DEBUGGING
-            print(self.player.weapon, self.fire_rate, self.time1, self.player.firing)
+            #print(self.player.weapon, self.fire_rate, self.time1, self.player.firing)
 
 
 
@@ -124,10 +138,16 @@ class Game():
                         self.player.moving_down = True
                     if event.key == pygame.K_SPACE:
                         self.player.firing = True
-                    if event.key == pygame.K_k:
-                        for enemy in self.enemies:
-                            enemy.kill()
-                            self.enemies_killed +=1
+                    if event.key == self.CODE[self.index] and self.player.weapon != "devlogger":
+                        self.code.append(event.key)
+                        self.index += 1
+                        if self.code == self.CODE:
+                            print("Have fun, ya psycho!")
+                            self.index = 0
+                            self.player.weapon = "devlogger"
+                    else:
+                        self.code = []
+                        self.index = 0
                     if event.key == pygame.K_e:
                         if self.player.weapon == "pistol":
                             self.player.weapon  = "automatica"
@@ -137,6 +157,8 @@ class Game():
 
                         elif self.player.weapon == "shotgun": #semi-auto
                             self.player.weapon = "pistol"
+
+
 
                 #More Keayboard-Based events
                 if event.type == pygame.KEYUP:
@@ -215,7 +237,8 @@ class Game():
                     if self.player.weapon == "devlogger":
                         enemy.hp -= 10
                     if self.player.weapon == "shotgun":
-                        enemy.hp -= 1
+                        enemy.hp -= 2
+                        
                     enemy.knockback(bullet)
                     if enemy.hp <= 0:
                         enemy.kill()
@@ -238,6 +261,8 @@ class Game():
                         speedy_boi.hp -= 0.5
                     if self.player.weapon == "devlogger":
                         speedy_boi.hp -= 10
+                    if self.player.weapon == "shotgun":
+                        enemy.hp -= 2
                     speedyboi.knockback(bullet)
                     if speedyboi.hp <= 0:
                         speedyboi.kill()
@@ -260,6 +285,8 @@ class Game():
                         bigenemy.hp -= 0.5
                     if self.player.weapon == "devlogger":
                         bigenemy.hp -= 10
+                    if self.player.weapon == "shotgun":
+                        enemy.hp -= 2
                     bigenemy.knockback(bullet)
                     if bigenemy.hp <= 0: #if the HP of a specific big boi is 0 or lower...
                         bigenemy.kill() #ded
@@ -275,6 +302,8 @@ class Game():
                         blind_bulb.hp -= 0.5
                     if self.player.weapon == "devlogger":
                         blind_bulb.hp -= 10
+                    if self.player.weapon == "shotgun":
+                        enemy.hp -= 2
                     blind_bulb.knockback(bullet)
                     if blind_bulb.hp <= 0:
                         self.player.status = "blind"
@@ -290,6 +319,8 @@ class Game():
                         death_bulb.hp -= 0.5
                     if self.player.weapon == "devlogger":
                         death_bulb.hp -= 10
+                    if self.player.weapon == "shotgun":
+                        enemy.hp -= 2
                     if death_bulb.hp <= 0:
                         self.player.status = "permablind"
                         death_bulb.kill()
@@ -303,6 +334,8 @@ class Game():
                         zipperskull.hp -= 0.5
                     if self.player.weapon == "devlogger":
                         zipperskull.hp -= 10
+                    if self.player.weapon == "shotgun":
+                        enemy.hp -= 2
                     if zipperskull.hp <= 0:
                         zipperskull.kill()
                         self.score+=50
@@ -336,18 +369,16 @@ class Game():
                                 bullet = Bullet(self)
                                 bullet.direction[0], bullet.direction[1] = bullet.get_shotgun(self, self.settings.bullet_SPREAD)
                                 self.bullets.add(bullet)
-                            print("[END GROUP]")
                             
                             self.time1 += 250
 
                 if self.player.weapon == "devlogger":
                         self.fire_rate += 500
                         if self.fire_rate >= self.time1:
-                            for i in range(16):
+                            for i in range(36):
                                 bullet = Bullet(self)
-                                bullet.direction[0], bullet.direction[1] = bullet.get_shotgun(self, self.settings.bullet_SPREAD*2)
+                                bullet.direction[0], bullet.direction[1] = bullet.get_shotgun(self, self.settings.bullet_SPREAD*3)
                                 self.bullets.add(bullet)
-                            self.bullets.add(bullet)
                             self.time1 += 250
 
 
@@ -396,11 +427,11 @@ class Game():
 
 
             #Wave Threshold Handlers
-            if self.enemies_spawned > 0.3*self.level_threshold:
+            """            if self.enemies_spawned > 0.3*self.level_threshold:
                 self.settings.spawnrate = 1
 
             if (self.enemies_spawned - self.enemies_killed) < 0.3*self.level_threshold:
-                self.settings.spawnrate = 0.8
+                self.settings.spawnrate = 0.8"""
 
 
 
@@ -417,7 +448,7 @@ class Game():
                 self.speedy_bois.add(speedy_boi)
                 self.speedy_bois_spawned +=1
 
-            if random.random() < 0.00001 and self.bulbs_spawned < 1:
+            if random.random() < 0.0001 and self.bulbs_spawned < 1:
                 if random.random() < 0.0000001:
                     self.death_bulbs.add(death_bulb)
                     self.bulbs_spawned += 1
