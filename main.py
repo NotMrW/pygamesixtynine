@@ -83,7 +83,7 @@ class Game():
 
 
         #Wave Setup
-        self.wave_number = 1
+        self.wave_number = 6
         self.wave_surface = self.font.render(f"Wave: {self.wave_number}", True, (255, 255, 255)) 
         self.spawn_counter = 0
         self.level_threshold = 5 + 5*self.wave_number
@@ -546,8 +546,10 @@ class Game():
                         self.level_threshold = 5 + 7*self.wave_number
                     if self.wave_number <= 10: 
                         self.biglevel_threshold = math.floor(self.wave_number // 5)
+                        self.speedylevel_threshold = 0+math.floor(self.wave_number//7)
                     elif self.wave_number > 10: 
                         self.biglevel_threshold = math.floor(self.wave_number // 3)
+                        self.speedylevel_threshold = 0+math.floor(self.wave_number//6)
                 for medkit in self.medkits:
                     medkit.kill()
 
@@ -577,8 +579,10 @@ class Game():
                         self.level_threshold = 5 + 7*self.wave_number
                     if self.wave_number <= 10: 
                         self.biglevel_threshold = math.floor(self.wave_number // 5)
+                        self.speedylevel_threshold = 0+math.floor(self.wave_number//7)
                     elif self.wave_number > 10: 
                         self.biglevel_threshold = math.floor(self.wave_number // 3)
+                        self.speedylevel_threshold = 0+math.floor(self.wave_number//6)
                 for medkit in self.medkits:
                     medkit.kill()
             self.clock.tick(self.settings.FPS) 
