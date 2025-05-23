@@ -23,13 +23,13 @@ class Player:
         self.death_image = ("sprites/manFace.png")
         self.rect = self.image.get_rect()
         self.rect.center = game.rect.center
-        self.weapon_list = ["pistol", "automatica", "devlogger"]
+        self.weapon_list = ["pistol"]
         
 
 
         #Variables regarding certain status of the player
         self.status = "none"
-        self.weapon = "shotgun" #List: pistol, automatica, devlogger
+        self.weapon = "pistol" #List: pistol, automatica, devlogger
         self.firing = False
 
 

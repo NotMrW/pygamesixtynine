@@ -149,14 +149,20 @@ class Game():
                         self.code = []
                         self.index = 0
                     if event.key == pygame.K_e:
-                        if self.player.weapon == "pistol":
-                            self.player.weapon  = "automatica"
+                        if not len(self.player.weapon_list) <= 1:
+                            if self.player.weapon == self.player.weapon_list[-1]:
+                                self.player.weapon = self.player.weapon_list[0]
+                            else:
+                                self.player.weapon = self.player.weapon_list[self.player.weapon_list.index(self.player.weapon)+1]
 
-                        elif self.player.weapon == "automatica":
-                            self.player.weapon  = "shotgun"
+                            #if self.player.weapon == "pistol":
+                                #self.player.weapon  = "automatica"
 
-                        elif self.player.weapon == "shotgun": #semi-auto
-                            self.player.weapon = "pistol"
+                            #elif self.player.weapon == "automatica":
+                                #self.player.weapon  = "shotgun"
+
+                            #elif self.player.weapon == "shotgun": #semi-auto
+                                #self.player.weapon = "pistol"
 
 
 
